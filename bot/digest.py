@@ -1,16 +1,15 @@
 """
 digest.py
-Builds the full weekly digest — counts, trends, spikes, sentiment score,
-sub-category breakdown, and verbatim examples.
-Loads last week's data from last_run.json for comparison.
+Builds the weekly digest with counts, trends, spikes, and sentiment score.
+Stores discovered buckets in last_run.json so classifier can reference them next week.
 """
 from __future__ import annotations
 import json
 import logging
 import os
 from collections import defaultdict, Counter
-from datetime import datetime, timezone
-from bot.classifier import TAXONOMY
+from datetime import datetime, timezone, timedelta
+from bot.config import DAYS_TO_FETCH
 
 log = logging.getLogger(__name__)
 LAST_RUN_FILE = 'last_run.json'
@@ -27,110 +26,99 @@ def load_last_run() -> dict:
 
 
 def save_last_run(digest: dict) -> None:
-    exportable = {
-        'generated_at':   digest['generated_at'],
-        'total':          digest['total'],
-        'by_category':    {k: {'count': v['count']} for k, v in digest['by_category'].items()},
-        'sentiment_score': digest['sentiment_score'],
-    }
     with open(LAST_RUN_FILE, 'w') as f:
-        json.dump(exportable, f, indent=2)
+        json.dump({
+            'generated_at':    digest['generated_at'],
+            'date_range':      digest['date_range'],
+            'total':           digest['total'],
+            'sentiment_score': digest['sentiment_score'],
+            'by_category':     {k: {'count': v['count']} for k, v in digest['by_category'].items()},
+            'buckets':         digest.get('buckets', []),
+        }, f, indent=2)
     log.info(f'Saved run data to {LAST_RUN_FILE}')
 
 
-def _sentiment_score(negative: int, total: int) -> float:
-    """Score out of 10 — higher is better. 10 = no negative reviews."""
-    if total == 0:
-        return 10.0
+def _score(negative: int, total: int) -> float:
+    if total == 0: return 10.0
     return round(10 * (1 - negative / total), 1)
 
 
-def build_digest(reviews: list[dict]) -> dict:
-    last = load_last_run()
-    prev_category_counts: dict = {k: v.get('count', 0)
-                                   for k, v in last.get('by_category', {}).items()}
-    prev_total          = last.get('total', 0)
-    prev_score          = last.get('sentiment_score', None)
-    prev_date           = last.get('generated_at', 'N/A')
+def build_digest(reviews: list[dict], buckets: list[dict]) -> dict:
+    last            = load_last_run()
+    prev_cat_counts = {k: v.get('count', 0) for k, v in last.get('by_category', {}).items()}
+    prev_total      = last.get('total', 0)
+    prev_score      = last.get('sentiment_score', None)
+    prev_date_range = last.get('date_range', 'N/A')
 
-    # ── Build counts ──────────────────────────────────────────────
+    now        = datetime.now(timezone.utc)
+    start      = now - timedelta(days=DAYS_TO_FETCH)
+    date_range = f'{start.strftime("%d %b")} – {now.strftime("%d %b %Y")}'
+
+    # ── Aggregate ─────────────────────────────────────────────────
     by_category: dict = defaultdict(lambda: {
-        'count': 0, 'sub_categories': defaultdict(int), 'examples': []
+        'count': 0, 'sub_categories': defaultdict(int), 'examples': [], 'team_tag': ''
     })
     sentiment_counter = Counter()
 
+    # Build team_tag lookup from buckets
+    team_lookup = {b['name']: b.get('team_tag', '') for b in buckets}
+
     for r in reviews:
-        cat  = r.get('category', 'Other / Vague')
-        sub  = r.get('sub_category', '')
+        cat  = r.get('category', 'General Complaints')
         sent = r.get('sentiment', 'Negative')
         text = r.get('text', '').strip()
+        rc   = r.get('root_cause', '')
 
         sentiment_counter[sent] += 1
         bucket = by_category[cat]
         bucket['count'] += 1
-        bucket['sub_categories'][sub] += 1
+        bucket['team_tag'] = team_lookup.get(cat, r.get('team_tag', ''))
+
+        # Use root_cause as sub-category label (dynamic, from Gemini)
+        if rc:
+            short_rc = rc[:80] + ('…' if len(rc) > 80 else '')
+            bucket['sub_categories'][short_rc] += 1
+
         if text and len(bucket['examples']) < 3:
-            snippet = text[:200] + ('…' if len(text) > 200 else '')
+            snippet = text[:180] + ('…' if len(text) > 180 else '')
             bucket['examples'].append(f'[{r["rating"]}★] {snippet}')
 
-    # ── Compute deltas ────────────────────────────────────────────
     for cat, data in by_category.items():
-        data['delta']         = data['count'] - prev_category_counts.get(cat, 0)
+        data['delta']          = data['count'] - prev_cat_counts.get(cat, 0)
         data['sub_categories'] = dict(data['sub_categories'])
 
-    # ── Sentiment score ───────────────────────────────────────────
     neg   = sentiment_counter.get('Negative', 0)
     total = len(reviews)
-    score = _sentiment_score(neg, total)
+    score = _score(neg, total)
 
-    # ── Top issues (exclude no-text bucket) ───────────────────────
     top_issues = sorted(
-        [(cat, data['count'], data['delta'])
+        [(cat, data['count'], data['delta'], data['team_tag'])
          for cat, data in by_category.items()
-         if cat not in ('Uncategorized / No Text',) and data['count'] > 0],
+         if cat != 'Uncategorized / No Text' and data['count'] > 0],
         key=lambda x: -x[1]
     )
 
-    # ── Spike detection: new or jumped >50% vs last week ──────────
     spikes = []
-    for cat, count, delta in top_issues:
-        prev = prev_category_counts.get(cat, 0)
+    for cat, count, delta, tag in top_issues:
+        prev = prev_cat_counts.get(cat, 0)
         if prev == 0 and count >= 3:
-            spikes.append((cat, count, 'NEW this week'))
+            spikes.append((cat, count, 'NEW this week', tag))
         elif prev > 0 and delta > 0 and (delta / prev) >= 0.5:
-            pct = int((delta / prev) * 100)
-            spikes.append((cat, count, f'↑ {pct}% spike vs last week'))
+            spikes.append((cat, count, f'↑ {int((delta/prev)*100)}% spike', tag))
 
     return {
-        'generated_at':    datetime.now(timezone.utc).strftime('%d %b %Y'),
-        'prev_date':       prev_date,
+        'generated_at':    now.strftime('%d %b %Y'),
+        'date_range':      date_range,
+        'prev_date_range': prev_date_range,
         'total':           total,
         'prev_total':      prev_total,
         'total_delta':     total - prev_total,
         'by_sentiment':    dict(sentiment_counter),
         'by_category':     dict(by_category),
-        'top_issues':      top_issues,
-        'spikes':          spikes,
+        'top_issues':      top_issues,   # (cat, count, delta, team_tag)
+        'spikes':          spikes,        # (cat, count, label, team_tag)
         'sentiment_score': score,
         'prev_score':      prev_score,
+        'buckets':         buckets,
         'raw':             reviews,
-    }
-
-
-def filter_for_team(digest: dict, categories: list | None) -> dict:
-    if categories is None:
-        return digest
-    filtered_reviews = [r for r in digest['raw'] if r.get('category') in categories]
-    filtered_cats    = {k: v for k, v in digest['by_category'].items() if k in categories}
-    filtered_top     = [(c, n, d) for c, n, d in digest['top_issues'] if c in categories]
-    filtered_spikes  = [(c, n, l) for c, n, l in digest['spikes'] if c in categories]
-    neg = sum(1 for r in filtered_reviews if r.get('sentiment') == 'Negative')
-    return {
-        **digest,
-        'total':        len(filtered_reviews),
-        'by_category':  filtered_cats,
-        'top_issues':   filtered_top,
-        'spikes':       filtered_spikes,
-        'sentiment_score': _sentiment_score(neg, len(filtered_reviews)),
-        'raw':          filtered_reviews,
     }
