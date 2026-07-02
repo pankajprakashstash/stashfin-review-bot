@@ -1,0 +1,41 @@
+name: StashFin Review Bot
+
+on:
+  schedule:
+    - cron: '30 3 * * 1'   # Every Monday 9:00am IST (3:30am UTC)
+  workflow_dispatch:         # Also allows manual trigger from GitHub UI
+
+jobs:
+  run-bot:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Run review bot
+        env:
+          GEMINI_API_KEY:    ${{ secrets.GEMINI_API_KEY }}
+          GMAIL_SENDER:      ${{ secrets.GMAIL_SENDER }}
+          GMAIL_APP_PASSWORD: ${{ secrets.GMAIL_APP_PASSWORD }}
+          EMAIL_PRODUCT:     ${{ secrets.EMAIL_PRODUCT }}
+          EMAIL_TECH:        ${{ secrets.EMAIL_TECH }}
+          EMAIL_CX:          ${{ secrets.EMAIL_CX }}
+          EMAIL_RISK:        ${{ secrets.EMAIL_RISK }}
+        run: python main.py
+
+      - name: Save last run data for next week trend comparison
+        run: |
+          git config user.name  "Review Bot"
+          git config user.email "bot@stashfin.com"
+          git add last_run.json || true
+          git diff --staged --quiet || git commit -m "chore: update last_run.json [skip ci]"
+          git push || true
