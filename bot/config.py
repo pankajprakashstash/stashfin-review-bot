@@ -12,7 +12,7 @@ BATCH_SIZE        = 15      # reviews per Gemini call
 
 # ── Gemini ────────────────────────────────────────────
 GEMINI_API_KEY = os.environ.get('GEMINI_API_KEY', '')
-GEMINI_MODEL   = 'gemini-1.5-flash'   # free tier
+GEMINI_MODEL   = 'gemini-2.5-flash'   # free tier
 
 # ── Gmail ─────────────────────────────────────────────
 GMAIL_SENDER       = os.environ.get('GMAIL_SENDER', '')
