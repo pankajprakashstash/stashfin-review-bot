@@ -32,7 +32,7 @@ def fetch_reviews() -> list[dict]:
     # Languages to fetch — covers English, Hindi, and falls back to
     # no-language-filter (None) which returns whatever Play Store
     # serves by default for India, catching Hinglish and regional mix
-    LANGUAGES = ['en', 'hi', None]
+    LANGUAGES = [None]
 
     # Each star rating fetched separately so count limit is not
     # wasted on 4-5 star reviews
