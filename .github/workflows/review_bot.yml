@@ -3,7 +3,7 @@ name: StashFin Review Bot
 on:
   schedule:
     - cron: '30 3 * * 1'   # Every Monday 9:00am IST (3:30am UTC)
-  workflow_dispatch:         # Also allows manual trigger from GitHub UI
+  workflow_dispatch:         # Manual trigger from GitHub UI
 
 jobs:
   run-bot:
@@ -23,16 +23,16 @@ jobs:
 
       - name: Run review bot
         env:
-          GEMINI_API_KEY:    ${{ secrets.GEMINI_API_KEY }}
-          GMAIL_SENDER:      ${{ secrets.GMAIL_SENDER }}
+          GEMINI_API_KEY:     ${{ secrets.GEMINI_API_KEY }}
+          GMAIL_SENDER:       ${{ secrets.GMAIL_SENDER }}
           GMAIL_APP_PASSWORD: ${{ secrets.GMAIL_APP_PASSWORD }}
-          EMAIL_ALL:         ${{ secrets.EMAIL_ALL }}
+          EMAIL_ALL:          ${{ secrets.EMAIL_ALL }}
         run: python main.py
 
-      - name: Save last run data for next week trend comparison
+      - name: Save history and publish detail page
         run: |
-          git config user.name  "Review Bot"
+          git config user.name  "stashfin-review-bot"
           git config user.email "bot@stashfin.com"
-          git add last_run.json || true
-          git diff --staged --quiet || git commit -m "chore: update last_run.json [skip ci]"
+          git add history.json last_run.json index.html || true
+          git diff --staged --quiet || git commit -m "chore: weekly run $(date +%Y-%m-%d) [skip ci]"
           git push || true
