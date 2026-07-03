@@ -333,7 +333,6 @@ def _build_html(digest: dict) -> str:
 
   <!-- BODY -->
   <tr><td style="padding:18px 18px 20px;">
-    {spike_html}
     {trend_section}
     {section_title}
     {cards_rows}
