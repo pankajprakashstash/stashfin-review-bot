@@ -1,16 +1,16 @@
 {
   "date_range": "26 Jun \u2013 03 Jul 2026",
   "generated_at": "2026-07-03",
-  "total": 59,
-  "weekly_total": 1209,
+  "total": 58,
+  "weekly_total": 1157,
   "avg_rating": 4.8,
-  "signal_rate": 4.9,
+  "signal_rate": 5.0,
   "star_counts": {
-    "1": 46,
-    "2": 6,
+    "1": 44,
+    "2": 7,
     "3": 7,
     "4": 16,
-    "5": 1134
+    "5": 1083
   },
   "buckets": [
     {
@@ -20,6 +20,10 @@
     {
       "name": "High Interest & Hidden Fees",
       "team_tag": "Product"
+    },
+    {
+      "name": "General Fraud Perception",
+      "team_tag": "Compliance"
     },
     {
       "name": "Loan Account Status Discrepancies",
@@ -35,69 +39,68 @@
     },
     {
       "name": "Upfront Fee for Non-Delivery",
-      "team_tag": "Product"
-    },
-    {
-      "name": "App Technical Glitches",
-      "team_tag": "Tech"
-    },
-    {
-      "name": "Loan Disbursement Failure",
-      "team_tag": "Ops"
-    },
-    {
-      "name": "UPI Activation Failure",
-      "team_tag": "Payments"
-    },
-    {
-      "name": "User Expectation Mismatch",
-      "team_tag": "Product"
+      "team_tag": "Compliance"
     },
     {
       "name": "Unjustified Charges",
       "team_tag": "Product"
     },
     {
+      "name": "UPI Activation Failure",
+      "team_tag": "Payments"
+    },
+    {
       "name": "Data Privacy / Misuse",
       "team_tag": "Compliance"
+    },
+    {
+      "name": "Loan Disbursement Failure",
+      "team_tag": "Ops"
+    },
+    {
+      "name": "App Technical Glitches",
+      "team_tag": "Tech"
     }
   ],
   "by_category": {
-    "Poor Customer Support": {
-      "count": 8
+    "High Interest & Hidden Fees": {
+      "count": 11
     },
-    "Data Privacy / Misuse": {
-      "count": 4
+    "Poor Customer Support": {
+      "count": 7
+    },
+    "General Fraud Perception": {
+      "count": 12
     },
     "Loan Account Status Discrepancies": {
       "count": 4
     },
-    "High Interest & Hidden Fees": {
-      "count": 12
-    },
     "Loan Disbursement Failure": {
-      "count": 4
-    },
-    "App Technical Glitches": {
-      "count": 6
+      "count": 5
     },
     "Payment Processing Failure": {
-      "count": 4
+      "count": 3
     },
     "Auto-Debit Mandate Problems": {
-      "count": 3
+      "count": 2
     },
     "Unjustified Charges": {
       "count": 3
-    },
-    "User Expectation Mismatch": {
-      "count": 7
     },
     "UPI Activation Failure": {
       "count": 1
     },
     "Upfront Fee for Non-Delivery": {
       "count": 3
+    },
+    "Data Privacy / Misuse": {
+      "count": 1
+    },
+    "App Technical Glitches": {
+      "count": 2
+    },
+    "Neutral": {
+      "count": 4
     }
   }
 }
