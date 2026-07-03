@@ -16,7 +16,7 @@ from bot.config import PLAY_PACKAGE_NAME, MAX_REVIEWS_PER_STAR
 log = logging.getLogger(__name__)
 
 PAGE_SIZE  = 200
-MAX_PAGES  = max(1, MAX_REVIEWS_PER_STAR // PAGE_SIZE) + 2
+MAX_PAGES  = 30
 RETRY_WAIT = 3
 
 
