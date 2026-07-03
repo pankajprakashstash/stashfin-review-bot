@@ -11,13 +11,13 @@ import os
 
 # ── App ────────────────────────────────────────────────────────────
 PLAY_PACKAGE_NAME    = 'com.stashfin.android'
-DAYS_TO_FETCH        = 14     # ← CHANGE TO 7 AFTER FIRST TEST RUN
+DAYS_TO_FETCH        = 7     # ← CHANGE TO 7 AFTER FIRST TEST RUN
 MAX_REVIEWS_PER_STAR = 850    # 850 × 3 stars = 2550 capacity
 
 # ── Gemini ─────────────────────────────────────────────────────────
 GEMINI_API_KEY = os.environ.get('GEMINI_API_KEY', '')
 GEMINI_MODEL   = 'gemini-2.5-flash'    # 1500 req/day free
-BATCH_SIZE     = 35
+BATCH_SIZE     = 30
 
 # ── Gmail ──────────────────────────────────────────────────────────
 GMAIL_SENDER       = os.environ.get('GMAIL_SENDER', '')
