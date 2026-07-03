@@ -143,10 +143,10 @@ def generate(digest: dict, output_path: str = 'index.html') -> None:
     if n_table_cols >= 2:
         thead_cols = ''.join(
             f'<th style="padding:8px 10px;text-align:center;'
-            f'{"background:#FFF5F5;color:{BRAND_CORAL};" if i==n_table_cols-1 else "color:#888;font-weight:500;"}'
-            f'font-size:12px;white-space:nowrap;">'
-            f'{_short_date(wk.get("date_range",""))}'   # ← FIXED: use _short_date not [:10]
-            f'{"← current" if i==n_table_cols-1 else ""}</th>'
+            f'{"background:#FFF5F5;color:" + BRAND_CORAL + ";" if i==n_table_cols-1 else "color:#888;font-weight:500;"}'
+            f'font-size:11px;white-space:nowrap;">'
+            f'{wk.get("date_range","")}'
+            f'</th>'
             for i, wk in enumerate(table_weeks)
         )
         tbody_rows = ''
