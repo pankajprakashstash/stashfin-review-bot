@@ -74,9 +74,15 @@ def _call_gemini(prompt: str, attempt: int = 0) -> str:
         )
         return resp.text.strip()
     except Exception as e:
-        if attempt < 3:
-            wait = 4 ** (attempt + 1)
-            log.warning(f'Gemini error: {e} — retry in {wait}s')
+        err = str(e).lower()
+        # Never retry on quota errors — retrying wastes calls and hits limit faster
+        if '429' in str(e) or 'quota' in err or 'exhausted' in err or 'resource_exhausted' in err:
+            log.error(f'Gemini quota exhausted — quota resets daily at midnight PT')
+            raise
+        # Only retry on genuine transient errors like network timeouts
+        if attempt < 2:
+            wait = 3 * (attempt + 1)
+            log.warning(f'Transient Gemini error: {e} — retry in {wait}s')
             time.sleep(wait)
             return _call_gemini(prompt, attempt + 1)
         raise
