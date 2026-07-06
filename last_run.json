@@ -1,16 +1,16 @@
 {
-  "date_range": "26 Jun \u2013 03 Jul 2026",
-  "generated_at": "2026-07-03",
-  "total": 68,
-  "weekly_total": 1228,
+  "date_range": "29 Jun \u2013 06 Jul 2026",
+  "generated_at": "2026-07-06",
+  "total": 73,
+  "weekly_total": 1222,
   "avg_rating": 4.8,
-  "signal_rate": 5.5,
+  "signal_rate": 6.0,
   "star_counts": {
-    "1": 52,
-    "2": 8,
-    "3": 8,
-    "4": 17,
-    "5": 1143
+    "1": 58,
+    "2": 11,
+    "3": 4,
+    "4": 22,
+    "5": 1127
   },
   "buckets": [
     {
@@ -19,7 +19,7 @@
     },
     {
       "name": "High Interest & Hidden Fees",
-      "team_tag": "Risk"
+      "team_tag": "Product"
     },
     {
       "name": "Poor Customer Support",
@@ -35,26 +35,20 @@
     }
   ],
   "by_category": {
-    "Payment & Auto-Debit Issues": {
-      "count": 6
-    },
     "High Interest & Hidden Fees": {
-      "count": 17
-    },
-    "Poor Customer Support": {
-      "count": 8
+      "count": 22
     },
     "Fraud & Upfront Fee Scam": {
-      "count": 20
+      "count": 23
     },
     "App Technical Glitches": {
-      "count": 15
+      "count": 13
     },
-    "Neutral": {
-      "count": 1
+    "Payment & Auto-Debit Issues": {
+      "count": 10
     },
-    "Positive": {
-      "count": 1
+    "Poor Customer Support": {
+      "count": 5
     }
   }
 }
