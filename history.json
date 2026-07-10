@@ -1,95 +1,6 @@
 {
   "weeks": [
     {
-      "date_range": "19 Jun \u2013 03 Jul 2026",
-      "generated_at": "2026-07-03",
-      "total": 104,
-      "weekly_total": 1517,
-      "avg_rating": 4.7,
-      "signal_rate": 6.9,
-      "star_counts": {
-        "1": 84,
-        "2": 10,
-        "3": 10,
-        "4": 27,
-        "5": 1386
-      },
-      "buckets": [
-        {
-          "name": "High Interest & Hidden Fees",
-          "team_tag": "Product"
-        },
-        {
-          "name": "Poor Customer Support",
-          "team_tag": "CX"
-        },
-        {
-          "name": "Payment Processing Failure",
-          "team_tag": "Payments"
-        },
-        {
-          "name": "Loan Account Status Discrepancies",
-          "team_tag": "Product"
-        },
-        {
-          "name": "Upfront Fee for Non-Delivery",
-          "team_tag": "Compliance"
-        },
-        {
-          "name": "App Technical Glitches",
-          "team_tag": "Tech"
-        },
-        {
-          "name": "Auto-Debit Mandate Problems",
-          "team_tag": "Payments"
-        },
-        {
-          "name": "Loan Disbursement Failure",
-          "team_tag": "Risk"
-        },
-        {
-          "name": "User Expectation Mismatch",
-          "team_tag": "Product"
-        },
-        {
-          "name": "Unjustified Charges",
-          "team_tag": "Compliance"
-        }
-      ],
-      "by_category": {
-        "Loan Account Status Discrepancies": {
-          "count": 7
-        },
-        "High Interest & Hidden Fees": {
-          "count": 19
-        },
-        "Loan Disbursement Failure": {
-          "count": 11
-        },
-        "App Technical Glitches": {
-          "count": 21
-        },
-        "Auto-Debit Mandate Problems": {
-          "count": 6
-        },
-        "Poor Customer Support": {
-          "count": 14
-        },
-        "Payment Processing Failure": {
-          "count": 4
-        },
-        "User Expectation Mismatch": {
-          "count": 12
-        },
-        "Upfront Fee for Non-Delivery": {
-          "count": 8
-        },
-        "Unjustified Charges": {
-          "count": 2
-        }
-      }
-    },
-    {
       "date_range": "26 Jun \u2013 03 Jul 2026",
       "generated_at": "2026-07-03",
       "total": 58,
@@ -603,6 +514,53 @@
         },
         "Payment & Auto-Debit Issues": {
           "count": 23
+        },
+        "Poor Customer Support": {
+          "count": 5
+        }
+      }
+    },
+    {
+      "date_range": "03 Jul 2026 \u2013 09 Jul 2026",
+      "generated_at": "2026-07-10",
+      "total": 74,
+      "weekly_total": 1236,
+      "avg_rating": 4.8,
+      "signal_rate": 6.0,
+      "star_counts": {
+        "1": 61,
+        "2": 9,
+        "3": 4,
+        "4": 21,
+        "5": 1141
+      },
+      "buckets": [
+        {
+          "name": "Fraud & Upfront Fee Scam",
+          "team_tag": "Compliance"
+        },
+        {
+          "name": "Payment & Auto-Debit Issues",
+          "team_tag": "Payments"
+        },
+        {
+          "name": "Poor Customer Support",
+          "team_tag": "CX"
+        },
+        {
+          "name": "Loan Processing Issues",
+          "team_tag": "Ops"
+        }
+      ],
+      "by_category": {
+        "Payment & Auto-Debit Issues": {
+          "count": 22
+        },
+        "Fraud & Upfront Fee Scam": {
+          "count": 34
+        },
+        "Loan Processing Issues": {
+          "count": 13
         },
         "Poor Customer Support": {
           "count": 5
