@@ -5,8 +5,8 @@ Fixes:
 1. Card titles: fixed height header, same font size for all
 2. Colors: only StashFin red/blue shades (from config.ISSUE_COLORS)
 3. Delta above latest sparkline bar (not below number)
-4. Smoother QuickChart: cubicInterpolationMode + tension 0.4
-5. KPI strip: 1-2-3★ focused only, total reviews and avg rating removed
+4. Smoother QuickChart: cubicInterpolationMode + tension 0.4 + v=4
+5. KPI strip: 1-2-3★ count + per-star breakdown (1★/2★/3★ counts)
 6. Date window: shows correct period (today excluded)
 """
 from __future__ import annotations
@@ -42,14 +42,7 @@ def _delta_html(n: int, size: str = '11px') -> str:
     return f'<span style="color:#999;font-size:{size};">→</span>'
 
 
-# ── QuickChart trend line ──────────────────────────────────────────
-
 def _trend_chart_url(digest: dict) -> str:
-    """
-    Build QuickChart.io URL for smooth trend line chart.
-    cubicInterpolationMode: monotone gives the smooth curve like Chart.js detail page.
-    Returns PNG image URL — works in all email clients.
-    """
     history    = digest.get('history', [])
     top_issues = [(c,n,d,t,p) for c,n,d,t,p in digest['top_issues']
                   if c not in EXCLUDE][:5]
@@ -63,7 +56,6 @@ def _trend_chart_url(digest: dict) -> str:
     week_labels  = []
     for pt in first_series:
         dr    = pt.get('date', '')
-        # Short label: "29 Jun – 05 Jul 2026" → "29 Jun"
         short = dr.split('–')[0].strip() if '–' in dr else dr[:8]
         week_labels.append(short)
 
@@ -79,16 +71,16 @@ def _trend_chart_url(digest: dict) -> str:
             continue
         label  = cat[:18] + ('…' if len(cat) > 18 else '')
         datasets.append({
-            'label':                    label,
-            'data':                     values,
-            'borderColor':              color,
-            'backgroundColor':          color + '18',
-            'fill':                     False,
-            'tension':                  0.4,
-            'cubicInterpolationMode':   'monotone',  # smooth curves
-            'pointRadius':              4,
-            'pointHoverRadius':         6,
-            'borderWidth':              2.5,
+            'label':                  label,
+            'data':                   values,
+            'borderColor':            color,
+            'backgroundColor':        color + '18',
+            'fill':                   False,
+            'tension':                0.4,
+            'cubicInterpolationMode': 'monotone',
+            'pointRadius':            4,
+            'pointHoverRadius':       6,
+            'borderWidth':            2.5,
         })
 
     if not datasets:
@@ -120,16 +112,11 @@ def _trend_chart_url(digest: dict) -> str:
 
     config_str = json.dumps(chart_config, separators=(',', ':'))
     encoded    = urllib.parse.quote(config_str, safe='')
+    # v=4 forces Chart.js v4 which supports cubicInterpolationMode for smooth curves
     return f'https://quickchart.io/chart?w=540&h=200&bkg=white&v=4&c={encoded}'
 
 
-# ── Sparkline with delta ABOVE latest bar ─────────────────────────
-
 def _sparkline_with_delta(counts: list[int], color: str, delta: int) -> str:
-    """
-    Bottom-aligned sparkline using nested tables.
-    Delta indicator appears ABOVE the last (most recent) bar.
-    """
     if not counts:
         return ''
 
@@ -137,11 +124,9 @@ def _sparkline_with_delta(counts: list[int], color: str, delta: int) -> str:
     MAX_H = 20
     n     = len(counts)
 
-    # Row 1: delta label only above the last bar
     delta_cells = ''
     for i in range(n):
         if i == n - 1:
-            # Delta above the last bar
             if delta > 0:
                 d = f'<span style="color:#CC0000;font-size:8px;font-weight:700;">↑+{delta}</span>'
             elif delta < 0:
@@ -153,7 +138,6 @@ def _sparkline_with_delta(counts: list[int], color: str, delta: int) -> str:
         else:
             delta_cells += '<td style="padding:0 1px 0 0;"></td>'
 
-    # Row 2: bars
     bar_cells = ''
     for i, c in enumerate(counts):
         bar_h  = max(2, int((c / max_c) * MAX_H))
@@ -177,13 +161,10 @@ def _sparkline_with_delta(counts: list[int], color: str, delta: int) -> str:
     )
 
 
-# ── Issue card — fixed header height for consistent title size ─────
-
 def _issue_card(cat: str, count: int, delta: int,
                 color: str, is_new: bool,
                 spark_counts: list[int], keywords: list[str]) -> str:
 
-    # Truncate title — same length for all cards
     short   = cat[:22] + ('…' if len(cat) > 22 else '')
     hdr_col = '#007A45' if is_new else color
     num_col = '#007A45' if is_new else color
@@ -213,17 +194,12 @@ def _issue_card(cat: str, count: int, delta: int,
         f'<table width="100%" cellpadding="0" cellspacing="0" border="0" '
         f'style="border:1.5px solid {hdr_col};border-radius:8px;'
         f'overflow:hidden;background:#fff;">'
-
-        # Header — fixed height 34px so all cards look identical
         f'<tr><td colspan="2" '
         f'style="background:{hdr_col};padding:0 12px;height:34px;'
         f'border-radius:6px 6px 0 0;vertical-align:middle;">'
         f'<span style="color:#fff;font-size:10px;font-weight:600;'
         f'letter-spacing:0.2px;line-height:1.3;">{short}</span>'
         f'</td></tr>'
-
-        # Body: left = count + sparkline with delta above bar
-        #       right = keywords
         f'<tr>'
         f'<td width="52%" valign="top" style="padding:10px 8px 10px 12px;">'
         f'{count_display}'
@@ -238,19 +214,18 @@ def _issue_card(cat: str, count: int, delta: int,
     )
 
 
-# ── Main HTML builder ──────────────────────────────────────────────
-
 def _build_html(digest: dict) -> str:
-    date_range  = digest['date_range']
-    prev_date   = digest.get('prev_date_range')
-    total       = digest['total']
-    total_delta = digest.get('total_delta', 0)
-    top_issues  = digest['top_issues']
-    color_map   = digest.get('color_map', {})
-    trend_data  = digest.get('trend_data', {})
-    by_category = digest.get('by_category', {})
-    history     = digest.get('history', [])
-    spikes      = digest.get('spikes', [])
+    date_range   = digest['date_range']
+    prev_date    = digest.get('prev_date_range')
+    total        = digest['total']
+    total_delta  = digest.get('total_delta', 0)
+    top_issues   = digest['top_issues']
+    color_map    = digest.get('color_map', {})
+    trend_data   = digest.get('trend_data', {})
+    by_category  = digest.get('by_category', {})
+    history      = digest.get('history', [])
+    spikes       = digest.get('spikes', [])
+    star_counts  = digest.get('star_counts', {})
 
     display = [(c,n,d,t,p) for c,n,d,t,p in top_issues if c not in EXCLUDE]
     top6    = display[:MAX_CARDS]
@@ -258,7 +233,7 @@ def _build_html(digest: dict) -> str:
 
     comp = f'vs {prev_date}' if prev_date and prev_date != date_range else ''
 
-    # ── Trend chart ────────────────────────────────────────────────
+    # Trend chart
     chart_url = _trend_chart_url(digest)
     if chart_url:
         trend_section = (
@@ -282,7 +257,7 @@ def _build_html(digest: dict) -> str:
             f'Trend chart appears from week 2 onwards</td></tr></table>'
         )
 
-    # ── Cards 3 per row ────────────────────────────────────────────
+    # Cards
     cards_rows = ''
     i = 0
     while i < len(top6):
@@ -318,12 +293,12 @@ def _build_html(digest: dict) -> str:
             f'+ {hidden} more areas in full breakdown</p>'
         )
 
-    # ── KPI: 1-2-3★ focused, total and avg rating removed ─────────
+    # KPI strip: total 1-2-3★ on left, per-star counts on right
     kpi_html = (
         f'<tr><td style="background:{BRAND_BLUE};padding:0;">'
         f'<table width="100%" cellpadding="0" cellspacing="0"><tr>'
 
-        # Tile 1: 1-2-3★ count (primary metric)
+        # Left: total count + delta
         f'<td width="50%" align="center" '
         f'style="padding:16px 8px;border-right:1px solid rgba(255,255,255,.12);">'
         f'<div style="font-size:34px;font-weight:700;color:#FF7070;line-height:1;">{total}</div>'
@@ -332,13 +307,22 @@ def _build_html(digest: dict) -> str:
         f'<div style="font-size:10px;margin-top:4px;">{_delta_html(total_delta)}</div>'
         f'</td>'
 
-        # Tile 2: week-over-week comparison
+        # Right: 1★, 2★, 3★ individual counts
         f'<td width="50%" align="center" style="padding:16px 8px;">'
-        f'<div style="font-size:13px;color:rgba(255,255,255,.7);line-height:1.4;">'
-        f'{"vs " + str(digest.get("prev_total", 0)) + " last week" if prev_date and prev_date != date_range else "First run"}'
+        f'<div style="display:inline-block;text-align:left;">'
+        f'<div style="font-size:11px;color:rgba(255,255,255,.75);'
+        f'line-height:2;white-space:nowrap;">'
+        f'1★ &nbsp;<strong style="color:#FF7070;font-size:14px;">'
+        f'{star_counts.get(1, 0)}</strong></div>'
+        f'<div style="font-size:11px;color:rgba(255,255,255,.75);'
+        f'line-height:2;white-space:nowrap;">'
+        f'2★ &nbsp;<strong style="color:#FF9090;font-size:14px;">'
+        f'{star_counts.get(2, 0)}</strong></div>'
+        f'<div style="font-size:11px;color:rgba(255,255,255,.75);'
+        f'line-height:2;white-space:nowrap;">'
+        f'3★ &nbsp;<strong style="color:#FFB3B3;font-size:14px;">'
+        f'{star_counts.get(3, 0)}</strong></div>'
         f'</div>'
-        f'<div style="font-size:9px;color:rgba(255,255,255,.5);margin-top:6px;'
-        f'text-transform:uppercase;letter-spacing:.6px;">Low-rated signals</div>'
         f'</td>'
 
         f'</tr></table></td></tr>'
