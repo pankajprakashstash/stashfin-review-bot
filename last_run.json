@@ -18,12 +18,8 @@
       "team_tag": "Compliance"
     },
     {
-      "name": "High Interest & Hidden Fees",
-      "team_tag": "Product"
-    },
-    {
       "name": "Loan Processing Issues",
-      "team_tag": "Ops"
+      "team_tag": "Product"
     },
     {
       "name": "Payment & Auto-Debit Issues",
@@ -36,19 +32,16 @@
   ],
   "by_category": {
     "Fraud & Upfront Fee Scam": {
-      "count": 20
+      "count": 24
     },
     "Loan Processing Issues": {
-      "count": 15
+      "count": 21
     },
     "Payment & Auto-Debit Issues": {
-      "count": 18
+      "count": 23
     },
     "Poor Customer Support": {
-      "count": 6
-    },
-    "High Interest & Hidden Fees": {
-      "count": 14
+      "count": 5
     }
   }
 }

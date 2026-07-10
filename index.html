@@ -9,10 +9,6 @@ body{margin:0;padding:0;background:#F5F7FA;
      font-family:'Helvetica Neue',Arial,sans-serif;color:#1A1A2E;}
 .container{max-width:900px;margin:0 auto;padding:0 16px 32px;}
 canvas{max-height:300px;}
-@media(max-width:600px){
-  .kpi-grid{display:block!important;}
-  .kpi-tile{margin-bottom:12px!important;}
-}
 </style>
 </head><body>
 
@@ -36,37 +32,19 @@ canvas{max-height:300px;}
 
 <div class="container">
 
-  <div class="kpi-grid"
-       style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:20px 0;">
-    <div class="kpi-tile" style="background:#fff;border-radius:10px;padding:14px 16px;
-                                  border:1px solid #E8EEF6;text-align:center;">
-      <div style="font-size:30px;font-weight:700;color:#1B3A6B;line-height:1;">
-        1265</div>
-      <div style="font-size:11px;color:#888;margin-top:3px;">Total reviews</div>
-    </div>
-    <div class="kpi-tile" style="background:#fff;border-radius:10px;padding:14px 16px;
-                                  border:1px solid #FFE5E5;text-align:center;">
-      <div style="font-size:30px;font-weight:700;color:#FF4040;line-height:1;">73</div>
-      <div style="font-size:11px;color:#888;margin-top:3px;">1-2-3★ reviews</div>
-    </div>
-    <div class="kpi-tile" style="background:#fff;border-radius:10px;padding:14px 16px;
-                                  border:1px solid #E8EEF6;text-align:center;">
-      <div style="font-size:30px;font-weight:700;color:#1B3A6B;line-height:1;">
-        4.8★</div>
-      <div style="font-size:11px;color:#888;margin-top:3px;">Avg rating this week</div>
-    </div>
-    <div class="kpi-tile" style="background:#fff;border-radius:10px;padding:14px 16px;
-                                  border:1px solid #E8EEF6;text-align:center;">
-      <div style="font-size:30px;font-weight:700;color:#E07800;line-height:1;">
-        5.8<span style="font-size:16px;">%</span></div>
-      <div style="font-size:11px;color:#888;margin-top:3px;">Negative signal rate</div>
+  <div style="margin:20px 0;text-align:center;">
+    <div style="background:#fff;border-radius:12px;padding:20px 32px;
+                border:1.5px solid #FFF0F0;display:inline-block;text-align:center;">
+      <div style="font-size:48px;font-weight:700;color:#FF4040;line-height:1;">73</div>
+      <div style="font-size:13px;color:#888;margin-top:6px;">1-2-3★ reviews this week</div>
+      <div style="font-size:12px;color:#1B3A6B;margin-top:5px;font-weight:600;">03 Jul 2026 – 09 Jul 2026</div>
     </div>
   </div>
 
   <div style="background:#fff;border-radius:12px;padding:20px;
                border:1px solid #E8EEF6;margin-bottom:20px;">
     <div style="font-size:14px;font-weight:600;color:#1B3A6B;margin-bottom:4px;">
-      Issue trend — 7-week view</div>
+      Issue trend — 8-week view</div>
     <div style="font-size:11px;color:#AAA;margin-bottom:14px;">
       Top issues over time · hover for exact values</div>
     <canvas id="trendChart" style="max-height:300px;"></canvas>
@@ -83,14 +61,14 @@ canvas{max-height:300px;}
             <thead><tr style="background:#EEF2F9;">
               <th style="padding:8px 10px;text-align:left;color:#1B3A6B;
                          font-size:12px;">Issue</th>
-              <th style="padding:8px 10px;text-align:center;color:#888;font-weight:500;font-size:11px;white-space:nowrap;">26 Jun – 03 Jul 2026</th><th style="padding:8px 10px;text-align:center;color:#888;font-weight:500;font-size:11px;white-space:nowrap;">26 Jun – 03 Jul 2026</th><th style="padding:8px 10px;text-align:center;color:#888;font-weight:500;font-size:11px;white-space:nowrap;">29 Jun – 06 Jul 2026</th><th style="padding:8px 10px;text-align:center;background:#FFF5F5;color:#FF4040;font-size:11px;white-space:nowrap;">03 Jul 2026 – 09 Jul 2026</th>
+              <th style="padding:8px 10px;text-align:center;color:#888;font-weight:500;font-size:11px;white-space:nowrap;">26 Jun – 03 Jul 2026</th><th style="padding:8px 10px;text-align:center;color:#888;font-weight:500;font-size:11px;white-space:nowrap;">29 Jun – 06 Jul 2026</th><th style="padding:8px 10px;text-align:center;color:#888;font-weight:500;font-size:11px;white-space:nowrap;">03 Jul 2026 – 09 Jul 2026</th><th style="padding:8px 10px;text-align:center;background:#FFF5F5;color:#FF4040;font-size:11px;white-space:nowrap;">03 Jul 2026 – 09 Jul 2026</th>
             </tr></thead>
-            <tbody><tr style="border-bottom:1px solid #F5F5F5;"><td style="padding:8px 10px;font-weight:600;color:#FF4040;">Fraud &amp; Upfront Fee Scam</td><td style="padding:8px 10px;text-align:center;color:#555;font-size:12px;">—</td><td style="padding:8px 10px;text-align:center;color:#555;font-size:12px;">20</td><td style="padding:8px 10px;text-align:center;color:#555;font-size:12px;">23</td><td style="padding:8px 10px;text-align:center;background:#FFF5F5;font-weight:700;color:#FF4040;font-size:12px;">20 ↓</td></tr><tr style="border-bottom:1px solid #F5F5F5;"><td style="padding:8px 10px;font-weight:600;color:#1B3A6B;">Payment &amp; Auto-Debit Issues</td><td style="padding:8px 10px;text-align:center;color:#555;font-size:12px;">—</td><td style="padding:8px 10px;text-align:center;color:#555;font-size:12px;">6</td><td style="padding:8px 10px;text-align:center;color:#555;font-size:12px;">10</td><td style="padding:8px 10px;text-align:center;background:#FFF5F5;font-weight:700;color:#1B3A6B;font-size:12px;">18 ↑</td></tr><tr style="border-bottom:1px solid #F5F5F5;"><td style="padding:8px 10px;font-weight:600;color:#CC2020;">Loan Processing Issues</td><td style="padding:8px 10px;text-align:center;color:#555;font-size:12px;">—</td><td style="padding:8px 10px;text-align:center;color:#555;font-size:12px;">—</td><td style="padding:8px 10px;text-align:center;color:#555;font-size:12px;">—</td><td style="padding:8px 10px;text-align:center;background:#FFF5F5;font-weight:700;color:#CC2020;font-size:12px;">15 ↑</td></tr><tr style="border-bottom:1px solid #F5F5F5;"><td style="padding:8px 10px;font-weight:600;color:#2C5F9E;">High Interest &amp; Hidden Fees</td><td style="padding:8px 10px;text-align:center;color:#555;font-size:12px;">11</td><td style="padding:8px 10px;text-align:center;color:#555;font-size:12px;">17</td><td style="padding:8px 10px;text-align:center;color:#555;font-size:12px;">22</td><td style="padding:8px 10px;text-align:center;background:#FFF5F5;font-weight:700;color:#2C5F9E;font-size:12px;">14 ↓</td></tr><tr style="border-bottom:1px solid #F5F5F5;"><td style="padding:8px 10px;font-weight:600;color:#FF7070;">Poor Customer Support</td><td style="padding:8px 10px;text-align:center;color:#555;font-size:12px;">7</td><td style="padding:8px 10px;text-align:center;color:#555;font-size:12px;">8</td><td style="padding:8px 10px;text-align:center;color:#555;font-size:12px;">5</td><td style="padding:8px 10px;text-align:center;background:#FFF5F5;font-weight:700;color:#FF7070;font-size:12px;">6 ↑</td></tr></tbody>
+            <tbody><tr style="border-bottom:1px solid #F5F5F5;"><td style="padding:8px 10px;font-weight:600;color:#FF4040;">Fraud &amp; Upfront Fee Scam</td><td style="padding:8px 10px;text-align:center;color:#555;font-size:12px;">20</td><td style="padding:8px 10px;text-align:center;color:#555;font-size:12px;">23</td><td style="padding:8px 10px;text-align:center;color:#555;font-size:12px;">20</td><td style="padding:8px 10px;text-align:center;background:#FFF5F5;font-weight:700;color:#FF4040;font-size:12px;">24 ↑</td></tr><tr style="border-bottom:1px solid #F5F5F5;"><td style="padding:8px 10px;font-weight:600;color:#1B3A6B;">Payment &amp; Auto-Debit Issues</td><td style="padding:8px 10px;text-align:center;color:#555;font-size:12px;">6</td><td style="padding:8px 10px;text-align:center;color:#555;font-size:12px;">10</td><td style="padding:8px 10px;text-align:center;color:#555;font-size:12px;">18</td><td style="padding:8px 10px;text-align:center;background:#FFF5F5;font-weight:700;color:#1B3A6B;font-size:12px;">23 ↑</td></tr><tr style="border-bottom:1px solid #F5F5F5;"><td style="padding:8px 10px;font-weight:600;color:#CC2020;">Loan Processing Issues</td><td style="padding:8px 10px;text-align:center;color:#555;font-size:12px;">—</td><td style="padding:8px 10px;text-align:center;color:#555;font-size:12px;">—</td><td style="padding:8px 10px;text-align:center;color:#555;font-size:12px;">15</td><td style="padding:8px 10px;text-align:center;background:#FFF5F5;font-weight:700;color:#CC2020;font-size:12px;">21 ↑</td></tr><tr style="border-bottom:1px solid #F5F5F5;"><td style="padding:8px 10px;font-weight:600;color:#2C5F9E;">Poor Customer Support</td><td style="padding:8px 10px;text-align:center;color:#555;font-size:12px;">8</td><td style="padding:8px 10px;text-align:center;color:#555;font-size:12px;">5</td><td style="padding:8px 10px;text-align:center;color:#555;font-size:12px;">6</td><td style="padding:8px 10px;text-align:center;background:#FFF5F5;font-weight:700;color:#2C5F9E;font-size:12px;">5 ↓</td></tr></tbody>
           </table>
         </div>
 
   <div style="font-size:14px;font-weight:600;color:#1B3A6B;margin:24px 0 12px;">
-    Detailed breakdown — 5 issue areas this week
+    Detailed breakdown — 4 issue areas this week
   </div>
   <div style="background:#fff;border-radius:12px;border:1.5px solid #FF4040;
                margin-bottom:14px;overflow:hidden;">
@@ -101,12 +79,12 @@ canvas{max-height:300px;}
       <span style="background:rgba(255,255,255,.25);color:#fff;font-size:10px;padding:2px 8px;border-radius:10px;margin-left:8px;">Compliance</span>
     </div>
     <div style="text-align:right;">
-      <span style="color:#fff;font-size:26px;font-weight:700;">20</span>
-      &nbsp;<span style="color:rgba(255,255,255,.8);font-size:12px;">↓ -3 vs last week</span>
+      <span style="color:#fff;font-size:26px;font-weight:700;">24</span>
+      &nbsp;<span style="color:rgba(255,255,255,.8);font-size:12px;">↑ +4 vs last week</span>
     </div>
   </div>
   <div style="padding:14px 20px;">
-    <div style="font-size:10px;font-weight:600;color:#AAA;text-transform:uppercase;letter-spacing:.5px;margin:12px 0 6px;">What users are saying</div><div style="display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid #F5F5F5;font-size:12px;"><span style="color:#444;">Fake loan app, warns not to pay money.</span><strong style="color:#FF4040;margin-left:8px;">1</strong></div><div style="display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid #F5F5F5;font-size:12px;"><span style="color:#444;">Paid 470 RS, no reason, app is fraud.</span><strong style="color:#FF4040;margin-left:8px;">1</strong></div><div style="display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid #F5F5F5;font-size:12px;"><span style="color:#444;">App asks for 1000 upfront deposit, makes fools.</span><strong style="color:#FF4040;margin-left:8px;">1</strong></div><div style="display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid #F5F5F5;font-size:12px;"><span style="color:#444;">App is fraud.</span><strong style="color:#FF4040;margin-left:8px;">1</strong></div><div style="display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid #F5F5F5;font-size:12px;"><span style="color:#444;">Fraud callers harass users, company uses fraudulent practices.</span><strong style="color:#FF4040;margin-left:8px;">1</strong></div>
+    <div style="font-size:10px;font-weight:600;color:#AAA;text-transform:uppercase;letter-spacing:.5px;margin:12px 0 6px;">What users are saying</div><div style="display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid #F5F5F5;font-size:12px;"><span style="color:#444;">Fake loan app, warns not to pay money</span><strong style="color:#FF4040;margin-left:8px;">1</strong></div><div style="display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid #F5F5F5;font-size:12px;"><span style="color:#444;">Paid 470 RS, no reason, app is fraud</span><strong style="color:#FF4040;margin-left:8px;">1</strong></div><div style="display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid #F5F5F5;font-size:12px;"><span style="color:#444;">Asked to pay 1000 upfront, making fools</span><strong style="color:#FF4040;margin-left:8px;">1</strong></div><div style="display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid #F5F5F5;font-size:12px;"><span style="color:#444;">App is fraud</span><strong style="color:#FF4040;margin-left:8px;">1</strong></div><div style="display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid #F5F5F5;font-size:12px;"><span style="color:#444;">Fraud callers harassing users</span><strong style="color:#FF4040;margin-left:8px;">1</strong></div>
     <div style="font-size:10px;font-weight:600;color:#AAA;text-transform:uppercase;letter-spacing:.5px;margin:12px 0 6px;">User voices</div><div style="background:#FFF0F0;border-left:3px solid #FF4040;padding:8px 12px;margin:5px 0;border-radius:0 6px 6px 0;font-size:12px;color:#555;font-style:italic;">[1★] fake loan app don&#39;t pay money this is a fake application</div><div style="background:#FFF0F0;border-left:3px solid #FF4040;padding:8px 12px;margin:5px 0;border-radius:0 6px 6px 0;font-size:12px;color:#555;font-style:italic;">[1★] 470 RS pay , no resion this application is frode, don&#39;t use</div>
   </div>
 </div><div style="background:#fff;border-radius:12px;border:1.5px solid #1B3A6B;
@@ -118,29 +96,29 @@ canvas{max-height:300px;}
       <span style="background:rgba(255,255,255,.25);color:#fff;font-size:10px;padding:2px 8px;border-radius:10px;margin-left:8px;">Payments</span>
     </div>
     <div style="text-align:right;">
-      <span style="color:#fff;font-size:26px;font-weight:700;">18</span>
-      &nbsp;<span style="color:rgba(255,255,255,.8);font-size:12px;">↑ +8 vs last week</span>
+      <span style="color:#fff;font-size:26px;font-weight:700;">23</span>
+      &nbsp;<span style="color:rgba(255,255,255,.8);font-size:12px;">↑ +5 vs last week</span>
     </div>
   </div>
   <div style="padding:14px 20px;">
-    <div style="font-size:10px;font-weight:600;color:#AAA;text-transform:uppercase;letter-spacing:.5px;margin:12px 0 6px;">What users are saying</div><div style="display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid #F5F5F5;font-size:12px;"><span style="color:#444;">EMIs bounce after payment, worst customer service.</span><strong style="color:#1B3A6B;margin-left:8px;">1</strong></div><div style="display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid #F5F5F5;font-size:12px;"><span style="color:#444;">Auto-debit created without receiving any loan.</span><strong style="color:#1B3A6B;margin-left:8px;">1</strong></div><div style="display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid #F5F5F5;font-size:12px;"><span style="color:#444;">Settlement amount not reflected, customer support unavailable, ticket failed.</span><strong style="color:#1B3A6B;margin-left:8px;">1</strong></div><div style="display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid #F5F5F5;font-size:12px;"><span style="color:#444;">Amount deducted twice, no customer support.</span><strong style="color:#1B3A6B;margin-left:8px;">1</strong></div><div style="display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid #F5F5F5;font-size:12px;"><span style="color:#444;">Auto-pay active after loan rejection, no solution.</span><strong style="color:#1B3A6B;margin-left:8px;">1</strong></div>
+    <div style="font-size:10px;font-weight:600;color:#AAA;text-transform:uppercase;letter-spacing:.5px;margin:12px 0 6px;">What users are saying</div><div style="display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid #F5F5F5;font-size:12px;"><span style="color:#444;">EMI payments bouncing despite being paid, poor customer service</span><strong style="color:#1B3A6B;margin-left:8px;">1</strong></div><div style="display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid #F5F5F5;font-size:12px;"><span style="color:#444;">Auto-debit created without receiving any loan</span><strong style="color:#1B3A6B;margin-left:8px;">1</strong></div><div style="display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid #F5F5F5;font-size:12px;"><span style="color:#444;">Settlement amount paid but not reflected, customer support unavailable</span><strong style="color:#1B3A6B;margin-left:8px;">1</strong></div><div style="display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid #F5F5F5;font-size:12px;"><span style="color:#444;">Amount deducted twice, no customer support</span><strong style="color:#1B3A6B;margin-left:8px;">1</strong></div><div style="display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid #F5F5F5;font-size:12px;"><span style="color:#444;">Auto-pay active after loan rejection, no solution provided</span><strong style="color:#1B3A6B;margin-left:8px;">1</strong></div>
     <div style="font-size:10px;font-weight:600;color:#AAA;text-transform:uppercase;letter-spacing:.5px;margin:12px 0 6px;">User voices</div><div style="background:#FFF0F0;border-left:3px solid #1B3A6B;padding:8px 12px;margin:5px 0;border-radius:0 6px 6px 0;font-size:12px;color:#555;font-style:italic;">[1★] worst app n service.......emi payment dena ke bhad b emi bounce hojate hai....worst customer service</div><div style="background:#FFF0F0;border-left:3px solid #1B3A6B;padding:8px 12px;margin:5px 0;border-radius:0 6px 6px 0;font-size:12px;color:#555;font-style:italic;">[1★] i didnt got any loan but still it created auto debt enach please cancek my aito debt</div>
   </div>
-</div><div style="background:#fff;border-radius:12px;border:1.5px solid #00875A;
+</div><div style="background:#fff;border-radius:12px;border:1.5px solid #CC2020;
                margin-bottom:14px;overflow:hidden;">
-  <div style="background:#00875A;padding:12px 20px;display:flex;
+  <div style="background:#CC2020;padding:12px 20px;display:flex;
                justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;">
     <div>
       <span style="color:#fff;font-size:14px;font-weight:600;">Loan Processing Issues</span>
-      <span style="background:rgba(255,255,255,.25);color:#fff;font-size:10px;padding:2px 8px;border-radius:10px;margin-left:8px;">Ops</span><span style="background:#fff;color:#00875A;font-size:10px;font-weight:700;padding:2px 8px;border-radius:4px;margin-left:8px;">NEW</span>
+      <span style="background:rgba(255,255,255,.25);color:#fff;font-size:10px;padding:2px 8px;border-radius:10px;margin-left:8px;">Product</span>
     </div>
     <div style="text-align:right;">
-      <span style="color:#fff;font-size:26px;font-weight:700;">15</span>
-      &nbsp;<span style="color:rgba(255,255,255,.8);font-size:12px;">↑ +15 vs last week</span>
+      <span style="color:#fff;font-size:26px;font-weight:700;">21</span>
+      &nbsp;<span style="color:rgba(255,255,255,.8);font-size:12px;">↑ +6 vs last week</span>
     </div>
   </div>
   <div style="padding:14px 20px;">
-    <div style="font-size:10px;font-weight:600;color:#AAA;text-transform:uppercase;letter-spacing:.5px;margin:12px 0 6px;">What users are saying</div><div style="display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid #F5F5F5;font-size:12px;"><span style="color:#444;">Loan cancelled without reason after approval and auto-debit.</span><strong style="color:#CC2020;margin-left:8px;">2</strong></div><div style="display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid #F5F5F5;font-size:12px;"><span style="color:#444;">Positive feedback</span><strong style="color:#CC2020;margin-left:8px;">2</strong></div><div style="display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid #F5F5F5;font-size:12px;"><span style="color:#444;">Cannot withdraw eligible amount, system error &#39;NA NA&#39;.</span><strong style="color:#CC2020;margin-left:8px;">1</strong></div><div style="display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid #F5F5F5;font-size:12px;"><span style="color:#444;">Worst loan app, advises not to use.</span><strong style="color:#CC2020;margin-left:8px;">1</strong></div><div style="display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid #F5F5F5;font-size:12px;"><span style="color:#444;">Very worst app experience.</span><strong style="color:#CC2020;margin-left:8px;">1</strong></div>
+    <div style="font-size:10px;font-weight:600;color:#AAA;text-transform:uppercase;letter-spacing:.5px;margin:12px 0 6px;">What users are saying</div><div style="display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid #F5F5F5;font-size:12px;"><span style="color:#444;">Loan cancelled without reason after approval and auto-debit setup</span><strong style="color:#CC2020;margin-left:8px;">2</strong></div><div style="display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid #F5F5F5;font-size:12px;"><span style="color:#444;">Positive feedback, no specific issue mentioned</span><strong style="color:#CC2020;margin-left:8px;">2</strong></div><div style="display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid #F5F5F5;font-size:12px;"><span style="color:#444;">Eligible amount withdrawal failing with &#39;NA NA&#39; error</span><strong style="color:#CC2020;margin-left:8px;">1</strong></div><div style="display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid #F5F5F5;font-size:12px;"><span style="color:#444;">Line of credit not working despite timely payments</span><strong style="color:#CC2020;margin-left:8px;">1</strong></div><div style="display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid #F5F5F5;font-size:12px;"><span style="color:#444;">Unwanted platform fees and GST charges</span><strong style="color:#CC2020;margin-left:8px;">1</strong></div>
     <div style="font-size:10px;font-weight:600;color:#AAA;text-transform:uppercase;letter-spacing:.5px;margin:12px 0 6px;">User voices</div><div style="background:#FFF0F0;border-left:3px solid #CC2020;padding:8px 12px;margin:5px 0;border-radius:0 6px 6px 0;font-size:12px;color:#555;font-style:italic;">[1★] I have an existing loan and have been paying my EMIs on time without any default. I currently have an amount eligible for withdrawal, but when I try to process the withdrawal, the …</div><div style="background:#FFF0F0;border-left:3px solid #CC2020;padding:8px 12px;margin:5px 0;border-radius:0 6px 6px 0;font-size:12px;color:#555;font-style:italic;">[1★] Bahut hi bekar app. ₹5–7 lakh ka loan offer aur approval dikhaya, documents verify karwaye aur auto-debit mandate bhi set karwa liya. Uske baad bina kisi reason ke loan cancel kar …</div>
   </div>
 </div><div style="background:#fff;border-radius:12px;border:1.5px solid #2C5F9E;
@@ -148,34 +126,17 @@ canvas{max-height:300px;}
   <div style="background:#2C5F9E;padding:12px 20px;display:flex;
                justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;">
     <div>
-      <span style="color:#fff;font-size:14px;font-weight:600;">High Interest &amp; Hidden Fees</span>
-      <span style="background:rgba(255,255,255,.25);color:#fff;font-size:10px;padding:2px 8px;border-radius:10px;margin-left:8px;">Product</span>
-    </div>
-    <div style="text-align:right;">
-      <span style="color:#fff;font-size:26px;font-weight:700;">14</span>
-      &nbsp;<span style="color:rgba(255,255,255,.8);font-size:12px;">↓ -8 vs last week</span>
-    </div>
-  </div>
-  <div style="padding:14px 20px;">
-    <div style="font-size:10px;font-weight:600;color:#AAA;text-transform:uppercase;letter-spacing:.5px;margin:12px 0 6px;">What users are saying</div><div style="display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid #F5F5F5;font-size:12px;"><span style="color:#444;">Charged 473.3 RS for eligibility check.</span><strong style="color:#2C5F9E;margin-left:8px;">1</strong></div><div style="display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid #F5F5F5;font-size:12px;"><span style="color:#444;">UPI payment charges, NEFT failing, worst payment options.</span><strong style="color:#2C5F9E;margin-left:8px;">1</strong></div><div style="display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid #F5F5F5;font-size:12px;"><span style="color:#444;">Repeated verification fee, pathetic customer service, app stuck.</span><strong style="color:#2C5F9E;margin-left:8px;">1</strong></div><div style="display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid #F5F5F5;font-size:12px;"><span style="color:#444;">Unwanted platform fees and GST</span><strong style="color:#2C5F9E;margin-left:8px;">1</strong></div><div style="display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid #F5F5F5;font-size:12px;"><span style="color:#444;">High bounce charges, cannot pay bounced EMI same day</span><strong style="color:#2C5F9E;margin-left:8px;">1</strong></div>
-    <div style="font-size:10px;font-weight:600;color:#AAA;text-transform:uppercase;letter-spacing:.5px;margin:12px 0 6px;">User voices</div><div style="background:#FFF0F0;border-left:3px solid #2C5F9E;padding:8px 12px;margin:5px 0;border-radius:0 6px 6px 0;font-size:12px;color:#555;font-style:italic;">[1★] why satisfin app charged 473.3 rs in check eligibility?? tell me why?this ?</div><div style="background:#FFF0F0;border-left:3px solid #2C5F9E;padding:8px 12px;margin:5px 0;border-radius:0 6px 6px 0;font-size:12px;color:#555;font-style:italic;">[1★] when iam making upi payment there are charges of 53 rs no other loan app is collecting i tried making neft its getting failed worst payment options</div>
-  </div>
-</div><div style="background:#fff;border-radius:12px;border:1.5px solid #FF7070;
-               margin-bottom:14px;overflow:hidden;">
-  <div style="background:#FF7070;padding:12px 20px;display:flex;
-               justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;">
-    <div>
       <span style="color:#fff;font-size:14px;font-weight:600;">Poor Customer Support</span>
       <span style="background:rgba(255,255,255,.25);color:#fff;font-size:10px;padding:2px 8px;border-radius:10px;margin-left:8px;">CX</span>
     </div>
     <div style="text-align:right;">
-      <span style="color:#fff;font-size:26px;font-weight:700;">6</span>
-      &nbsp;<span style="color:rgba(255,255,255,.8);font-size:12px;">↑ +1 vs last week</span>
+      <span style="color:#fff;font-size:26px;font-weight:700;">5</span>
+      &nbsp;<span style="color:rgba(255,255,255,.8);font-size:12px;">↓ -1 vs last week</span>
     </div>
   </div>
   <div style="padding:14px 20px;">
-    <div style="font-size:10px;font-weight:600;color:#AAA;text-transform:uppercase;letter-spacing:.5px;margin:12px 0 6px;">What users are saying</div><div style="display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid #F5F5F5;font-size:12px;"><span style="color:#444;">No proper response for payment failure.</span><strong style="color:#FF7070;margin-left:8px;">1</strong></div><div style="display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid #F5F5F5;font-size:12px;"><span style="color:#444;">Worst customer service, no response to calls or mail.</span><strong style="color:#FF7070;margin-left:8px;">1</strong></div><div style="display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid #F5F5F5;font-size:12px;"><span style="color:#444;">Worst customer care, failed transaction, no support</span><strong style="color:#FF7070;margin-left:8px;">1</strong></div><div style="display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid #F5F5F5;font-size:12px;"><span style="color:#444;">Bad service</span><strong style="color:#FF7070;margin-left:8px;">1</strong></div><div style="display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid #F5F5F5;font-size:12px;"><span style="color:#444;">Very bad experience</span><strong style="color:#FF7070;margin-left:8px;">1</strong></div>
-    <div style="font-size:10px;font-weight:600;color:#AAA;text-transform:uppercase;letter-spacing:.5px;margin:12px 0 6px;">User voices</div><div style="background:#FFF0F0;border-left:3px solid #FF7070;padding:8px 12px;margin:5px 0;border-radius:0 6px 6px 0;font-size:12px;color:#555;font-style:italic;">[1★] no proper response for payment failure</div><div style="background:#FFF0F0;border-left:3px solid #FF7070;padding:8px 12px;margin:5px 0;border-radius:0 6px 6px 0;font-size:12px;color:#555;font-style:italic;">[1★] one of the worst customer service they provide. No response to call or mail. You can&#39;t contact them, we have to wait for their response 24hrs by keeping the mobile in hand. we get …</div>
+    <div style="font-size:10px;font-weight:600;color:#AAA;text-transform:uppercase;letter-spacing:.5px;margin:12px 0 6px;">What users are saying</div><div style="display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid #F5F5F5;font-size:12px;"><span style="color:#444;">No proper response regarding payment failure</span><strong style="color:#2C5F9E;margin-left:8px;">1</strong></div><div style="display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid #F5F5F5;font-size:12px;"><span style="color:#444;">Worst customer service, no response to calls or emails</span><strong style="color:#2C5F9E;margin-left:8px;">1</strong></div><div style="display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid #F5F5F5;font-size:12px;"><span style="color:#444;">Worst customer care, failed transaction, helpline issues</span><strong style="color:#2C5F9E;margin-left:8px;">1</strong></div><div style="display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid #F5F5F5;font-size:12px;"><span style="color:#444;">Poor customer service, extra charges</span><strong style="color:#2C5F9E;margin-left:8px;">1</strong></div><div style="display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid #F5F5F5;font-size:12px;"><span style="color:#444;">Application pending for 1 week, no response from support</span><strong style="color:#2C5F9E;margin-left:8px;">1</strong></div>
+    <div style="font-size:10px;font-weight:600;color:#AAA;text-transform:uppercase;letter-spacing:.5px;margin:12px 0 6px;">User voices</div><div style="background:#FFF0F0;border-left:3px solid #2C5F9E;padding:8px 12px;margin:5px 0;border-radius:0 6px 6px 0;font-size:12px;color:#555;font-style:italic;">[1★] no proper response for payment failure</div><div style="background:#FFF0F0;border-left:3px solid #2C5F9E;padding:8px 12px;margin:5px 0;border-radius:0 6px 6px 0;font-size:12px;color:#555;font-style:italic;">[1★] one of the worst customer service they provide. No response to call or mail. You can&#39;t contact them, we have to wait for their response 24hrs by keeping the mobile in hand. we get …</div>
   </div>
 </div>
 
@@ -197,8 +158,8 @@ canvas{max-height:300px;}
             new Chart(document.getElementById('trendChart'), {
                 type: 'line',
                 data: {
-                    labels: ["19 Jun \u2013 03 Jul 2026", "26 Jun \u2013 03 Jul 2026", "26 Jun \u2013 03 Jul 2026", "26 Jun \u2013 03 Jul 2026", "26 Jun \u2013 03 Jul 2026", "29 Jun \u2013 06 Jul 2026", "03 Jul 2026 \u2013 09 Jul 2026"],
-                    datasets: [{"label": "Fraud & Upfront Fee Scam", "data": [0, 20, 20, 20, 20, 23, 20], "borderColor": "#FF4040", "backgroundColor": "#FF404020", "tension": 0.3, "fill": false, "pointRadius": 4, "pointHoverRadius": 6}, {"label": "Payment & Auto-Debit Issues", "data": [0, 6, 6, 6, 6, 10, 18], "borderColor": "#1B3A6B", "backgroundColor": "#1B3A6B20", "tension": 0.3, "fill": false, "pointRadius": 4, "pointHoverRadius": 6}, {"label": "Loan Processing Issues", "data": [0, 0, 0, 0, 0, 0, 15], "borderColor": "#CC2020", "backgroundColor": "#CC202020", "tension": 0.3, "fill": false, "pointRadius": 4, "pointHoverRadius": 6}, {"label": "High Interest & Hidden Fees", "data": [19, 17, 17, 17, 17, 22, 14], "borderColor": "#2C5F9E", "backgroundColor": "#2C5F9E20", "tension": 0.3, "fill": false, "pointRadius": 4, "pointHoverRadius": 6}, {"label": "Poor Customer Support", "data": [14, 8, 8, 8, 8, 5, 6], "borderColor": "#FF7070", "backgroundColor": "#FF707020", "tension": 0.3, "fill": false, "pointRadius": 4, "pointHoverRadius": 6}]
+                    labels: ["19 Jun \u2013 03 Jul 2026", "26 Jun \u2013 03 Jul 2026", "26 Jun \u2013 03 Jul 2026", "26 Jun \u2013 03 Jul 2026", "26 Jun \u2013 03 Jul 2026", "29 Jun \u2013 06 Jul 2026", "03 Jul 2026 \u2013 09 Jul 2026", "03 Jul 2026 \u2013 09 Jul 2026"],
+                    datasets: [{"label": "Fraud & Upfront Fee Scam", "data": [0, 20, 20, 20, 20, 23, 24, 24], "borderColor": "#FF4040", "backgroundColor": "#FF404020", "tension": 0.4, "cubicInterpolationMode": "monotone", "fill": false, "pointRadius": 4, "pointHoverRadius": 6}, {"label": "Payment & Auto-Debit Issues", "data": [0, 6, 6, 6, 6, 10, 23, 23], "borderColor": "#1B3A6B", "backgroundColor": "#1B3A6B20", "tension": 0.4, "cubicInterpolationMode": "monotone", "fill": false, "pointRadius": 4, "pointHoverRadius": 6}, {"label": "Loan Processing Issues", "data": [0, 0, 0, 0, 0, 0, 21, 21], "borderColor": "#CC2020", "backgroundColor": "#CC202020", "tension": 0.4, "cubicInterpolationMode": "monotone", "fill": false, "pointRadius": 4, "pointHoverRadius": 6}, {"label": "Poor Customer Support", "data": [14, 8, 8, 8, 8, 5, 5, 5], "borderColor": "#2C5F9E", "backgroundColor": "#2C5F9E20", "tension": 0.4, "cubicInterpolationMode": "monotone", "fill": false, "pointRadius": 4, "pointHoverRadius": 6}]
                 },
                 options: {
                     responsive: true,
