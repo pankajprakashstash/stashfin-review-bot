@@ -1,8 +1,7 @@
 """
 scraper.py — Play Store Review Scraper
-Fetches ALL reviews per star rating with no count ceiling.
-Paginates until date cutoff is hit or pages are exhausted.
-4★ and 5★ counted only — no text, no Gemini cost.
+Fetches 1-2-3★ reviews between cutoff and upper_bound.
+4★ and 5★ are counted only — no text, no Gemini cost.
 """
 from __future__ import annotations
 import logging
@@ -13,8 +12,8 @@ from bot.config import PLAY_PACKAGE_NAME
 
 log = logging.getLogger(__name__)
 
-PAGE_SIZE  = 200
-MAX_PAGES  = 30       # 30 × 200 = 6000 per star — well above any weekly volume
+PAGE_SIZE = 200
+MAX_PAGES = 30
 RETRY_WAIT = 3
 
 
@@ -22,13 +21,14 @@ def _to_utc(dt: datetime) -> datetime:
     return dt.replace(tzinfo=timezone.utc) if dt.tzinfo is None else dt
 
 
-def _fetch_star(star: int, cutoff: datetime, seen_ids: set) -> list[dict]:
-    """Fetch all reviews for one star rating newer than cutoff. No count ceiling."""
+def _fetch_star(star: int, cutoff: datetime, upper: datetime,
+                seen_ids: set) -> list[dict]:
+    """Fetch reviews for one star rating between cutoff and upper bound."""
     collected = []
     token     = None
     page      = 0
 
-    while page < MAX_PAGES:     # ← only MAX_PAGES limit, no review count ceiling
+    while page < MAX_PAGES:
         kwargs = dict(lang='en', country='in', sort=Sort.NEWEST,
                       count=PAGE_SIZE, filter_score_with=star)
         if token:
@@ -40,30 +40,37 @@ def _fetch_star(star: int, cutoff: datetime, seen_ids: set) -> list[dict]:
                 break
             except Exception as e:
                 if attempt == 2:
-                    log.warning(f'{star}★ page {page+1} failed: {e}')
+                    log.warning(f'{star}★ p{page+1} failed: {e}')
                     return collected
                 time.sleep(RETRY_WAIT * (attempt + 1))
 
         page += 1
-
         if not result:
-            log.info(f'  {star}★ p{page}: empty — done')
             break
 
         hit_cutoff    = False
         new_this_page = 0
+
         for r in result:
             dt = r.get('at')
             if not dt:
                 continue
             dt = _to_utc(dt)
+
+            # Skip reviews newer than upper bound (today)
+            if dt > upper:
+                continue
+
+            # Stop when we go past the window
             if dt < cutoff:
                 hit_cutoff = True
                 break
+
             rid  = r.get('reviewId', '')
             if not rid or rid in seen_ids:
                 continue
             seen_ids.add(rid)
+
             text = (r.get('content') or '').strip()
             collected.append({
                 'review_id': rid,
@@ -82,17 +89,18 @@ def _fetch_star(star: int, cutoff: datetime, seen_ids: set) -> list[dict]:
     return collected
 
 
-def _count_star(star: int, cutoff: datetime) -> int:
-    """Count reviews for one star rating — no text, no Gemini cost."""
+def _count_star(star: int, cutoff: datetime, upper: datetime) -> int:
+    """Count reviews for one star rating in window — no text stored."""
     count = 0
     token = None
     page  = 0
 
-    while page < MAX_PAGES:     # ← same, no count ceiling
+    while page < MAX_PAGES:
         kwargs = dict(lang='en', country='in', sort=Sort.NEWEST,
                       count=PAGE_SIZE, filter_score_with=star)
         if token:
             kwargs['continuation_token'] = token
+
         try:
             result, token = gps_reviews(PLAY_PACKAGE_NAME, **kwargs)
         except Exception as e:
@@ -109,6 +117,8 @@ def _count_star(star: int, cutoff: datetime) -> int:
             if not dt:
                 continue
             dt = _to_utc(dt)
+            if dt > upper:
+                continue
             if dt < cutoff:
                 hit_cutoff = True
                 break
@@ -120,26 +130,28 @@ def _count_star(star: int, cutoff: datetime) -> int:
     return count
 
 
-def scrape(cutoff: datetime) -> tuple[list[dict], dict[int, int]]:
+def scrape(cutoff: datetime,
+           upper: datetime) -> tuple[list[dict], dict[int, int]]:
     """
-    Fetch all 1-2-3★ reviews + count 4★ and 5★.
-    Returns (reviews, star_counts) where star_counts = {1:n, 2:n, 3:n, 4:n, 5:n}
+    Fetch 1-2-3★ reviews between cutoff and upper.
+    Count 4★ and 5★ only.
+    Returns (reviews, star_counts)
     """
     seen_ids    = set()
     all_reviews = []
     star_counts = {}
 
     for star in [1, 2, 3]:
-        log.info(f'Fetching {star}★ reviews...')
-        sr = _fetch_star(star, cutoff, seen_ids)
+        log.info(f'Fetching {star}★...')
+        sr = _fetch_star(star, cutoff, upper, seen_ids)
         all_reviews.extend(sr)
         star_counts[star] = len(sr)
-        log.info(f'{star}★ done: {len(sr)} reviews in window')
+        log.info(f'{star}★ done: {len(sr)}')
 
     for star in [4, 5]:
-        log.info(f'Counting {star}★ (no text)...')
-        star_counts[star] = _count_star(star, cutoff)
+        log.info(f'Counting {star}★...')
+        star_counts[star] = _count_star(star, cutoff, upper)
         log.info(f'{star}★ count: {star_counts[star]}')
 
-    log.info(f'Scrape complete — star counts: {star_counts}')
+    log.info(f'Scrape complete: {star_counts}')
     return all_reviews, star_counts
