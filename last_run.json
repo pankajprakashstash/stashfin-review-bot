@@ -1,16 +1,16 @@
 {
   "date_range": "03 Jul 2026 \u2013 09 Jul 2026",
   "generated_at": "2026-07-10",
-  "total": 74,
-  "weekly_total": 1236,
+  "total": 75,
+  "weekly_total": 1238,
   "avg_rating": 4.8,
-  "signal_rate": 6.0,
+  "signal_rate": 6.1,
   "star_counts": {
-    "1": 61,
+    "1": 62,
     "2": 9,
     "3": 4,
     "4": 21,
-    "5": 1141
+    "5": 1142
   },
   "buckets": [
     {
@@ -31,17 +31,17 @@
     }
   ],
   "by_category": {
+    "Fraud & Upfront Fee Scam": {
+      "count": 39
+    },
     "Payment & Auto-Debit Issues": {
       "count": 22
     },
-    "Fraud & Upfront Fee Scam": {
-      "count": 34
-    },
     "Loan Processing Issues": {
-      "count": 13
+      "count": 10
     },
     "Poor Customer Support": {
-      "count": 5
+      "count": 4
     }
   }
 }
