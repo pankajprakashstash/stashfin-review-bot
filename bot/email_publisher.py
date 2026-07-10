@@ -1,13 +1,5 @@
 """
 email_publisher.py — Executive email, all fixes applied.
-
-Fixes:
-1. Card titles: fixed height header, same font size for all
-2. Colors: only StashFin red/blue shades (from config.ISSUE_COLORS)
-3. Delta above latest sparkline bar (not below number)
-4. Smoother QuickChart: cubicInterpolationMode + tension 0.4 + v=4
-5. KPI strip: 1-2-3★ count + per-star breakdown (1★/2★/3★ counts)
-6. Date window: shows correct period (today excluded)
 """
 from __future__ import annotations
 import json
@@ -43,6 +35,11 @@ def _delta_html(n: int, size: str = '11px') -> str:
 
 
 def _trend_chart_url(digest: dict) -> str:
+    """
+    QuickChart.io URL for smooth trend line chart.
+    v=4 forces Chart.js 4 which supports cubicInterpolationMode.
+    cnt_by_date alignment matches detail page logic exactly.
+    """
     history    = digest.get('history', [])
     top_issues = [(c,n,d,t,p) for c,n,d,t,p in digest['top_issues']
                   if c not in EXCLUDE][:5]
@@ -52,27 +49,28 @@ def _trend_chart_url(digest: dict) -> str:
     if not top_issues:
         return ''
 
-    first_series = trend_data.get(top_issues[0][0], [])
-    week_labels     = []
-week_labels_raw = []
-for pt in first_series:
-    dr    = pt.get('date', '')
-    short = dr.split('–')[0].strip() if '–' in dr else dr[:8]
-    week_labels.append(short)
-    week_labels_raw.append(dr)
+    first_series    = trend_data.get(top_issues[0][0], [])
+    week_labels     = []   # short labels for X axis display
+    week_labels_raw = []   # full date range strings for data lookup
 
-if len(week_labels) < 2:
-    return ''
+    for pt in first_series:
+        dr    = pt.get('date', '')
+        short = dr.split('–')[0].strip() if '–' in dr else dr[:8]
+        week_labels.append(short)
+        week_labels_raw.append(dr)
 
-datasets = []
-for cat, *_ in top_issues:
-    color       = color_map.get(cat, BRAND_CORAL)
-    series      = trend_data.get(cat, [])
-    cnt_by_date = {pt.get('date', ''): pt.get('count', 0) for pt in series}
-    values      = [cnt_by_date.get(wk, 0) for wk in week_labels_raw]
+    if len(week_labels) < 2:
+        return ''
+
+    datasets = []
+    for cat, *_ in top_issues:
+        color       = color_map.get(cat, BRAND_CORAL)
+        series      = trend_data.get(cat, [])
+        cnt_by_date = {pt.get('date', ''): pt.get('count', 0) for pt in series}
+        values      = [cnt_by_date.get(wk, 0) for wk in week_labels_raw]
         if len(values) != len(week_labels):
             continue
-        label  = cat[:18] + ('…' if len(cat) > 18 else '')
+        label = cat[:18] + ('…' if len(cat) > 18 else '')
         datasets.append({
             'label':                  label,
             'data':                   values,
@@ -115,7 +113,6 @@ for cat, *_ in top_issues:
 
     config_str = json.dumps(chart_config, separators=(',', ':'))
     encoded    = urllib.parse.quote(config_str, safe='')
-    # v=4 forces Chart.js v4 which supports cubicInterpolationMode for smooth curves
     return f'https://quickchart.io/chart?w=540&h=200&bkg=white&v=4&c={encoded}'
 
 
@@ -260,7 +257,7 @@ def _build_html(digest: dict) -> str:
             f'Trend chart appears from week 2 onwards</td></tr></table>'
         )
 
-    # Cards
+    # Cards 3 per row
     cards_rows = ''
     i = 0
     while i < len(top6):
@@ -296,12 +293,10 @@ def _build_html(digest: dict) -> str:
             f'+ {hidden} more areas in full breakdown</p>'
         )
 
-    # KPI strip: total 1-2-3★ on left, per-star counts on right
+    # KPI strip
     kpi_html = (
         f'<tr><td style="background:{BRAND_BLUE};padding:0;">'
         f'<table width="100%" cellpadding="0" cellspacing="0"><tr>'
-
-        # Left: total count + delta
         f'<td width="50%" align="center" '
         f'style="padding:16px 8px;border-right:1px solid rgba(255,255,255,.12);">'
         f'<div style="font-size:34px;font-weight:700;color:#FF7070;line-height:1;">{total}</div>'
@@ -309,8 +304,6 @@ def _build_html(digest: dict) -> str:
         f'text-transform:uppercase;letter-spacing:.6px;">1-2-3★ reviews</div>'
         f'<div style="font-size:10px;margin-top:4px;">{_delta_html(total_delta)}</div>'
         f'</td>'
-
-        # Right: 1★, 2★, 3★ individual counts
         f'<td width="50%" align="center" style="padding:16px 8px;">'
         f'<div style="display:inline-block;text-align:left;">'
         f'<div style="font-size:11px;color:rgba(255,255,255,.75);'
@@ -327,7 +320,6 @@ def _build_html(digest: dict) -> str:
         f'{star_counts.get(3, 0)}</strong></div>'
         f'</div>'
         f'</td>'
-
         f'</tr></table></td></tr>'
     )
 
@@ -342,7 +334,6 @@ def _build_html(digest: dict) -> str:
        style="background:#fff;border-radius:12px;overflow:hidden;
               box-shadow:0 2px 16px rgba(27,58,107,.10);">
 
-  <!-- HEADER -->
   <tr><td style="background:{BRAND_CORAL};padding:18px 24px;">
     <div style="font-size:11px;color:rgba(255,255,255,.8);font-weight:600;
                 letter-spacing:1.2px;margin-bottom:2px;">STASHFIN</div>
@@ -352,10 +343,8 @@ def _build_html(digest: dict) -> str:
       {date_range}{f' &nbsp;|&nbsp; {comp}' if comp else ''}</div>
   </td></tr>
 
-  <!-- KPI STRIP -->
   {kpi_html}
 
-  <!-- BODY -->
   <tr><td style="padding:18px 18px 20px;">
 
     {trend_section}
@@ -384,7 +373,6 @@ def _build_html(digest: dict) -> str:
 
   </td></tr>
 
-  <!-- FOOTER -->
   <tr><td style="background:{BRAND_BLUE_LT};padding:12px 24px;
                   border-top:1px solid #E0E8F4;">
     <div style="font-size:10px;color:#999;line-height:1.7;">
