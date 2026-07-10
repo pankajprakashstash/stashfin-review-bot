@@ -1,16 +1,16 @@
 {
-  "date_range": "29 Jun \u2013 06 Jul 2026",
-  "generated_at": "2026-07-06",
+  "date_range": "03 Jul 2026 \u2013 09 Jul 2026",
+  "generated_at": "2026-07-10",
   "total": 73,
-  "weekly_total": 1222,
+  "weekly_total": 1265,
   "avg_rating": 4.8,
-  "signal_rate": 6.0,
+  "signal_rate": 5.8,
   "star_counts": {
-    "1": 58,
-    "2": 11,
-    "3": 4,
-    "4": 22,
-    "5": 1127
+    "1": 61,
+    "2": 9,
+    "3": 3,
+    "4": 21,
+    "5": 1171
   },
   "buckets": [
     {
@@ -22,33 +22,33 @@
       "team_tag": "Product"
     },
     {
-      "name": "Poor Customer Support",
-      "team_tag": "CX"
+      "name": "Loan Processing Issues",
+      "team_tag": "Ops"
     },
     {
       "name": "Payment & Auto-Debit Issues",
       "team_tag": "Payments"
     },
     {
-      "name": "App Technical Glitches",
-      "team_tag": "Tech"
+      "name": "Poor Customer Support",
+      "team_tag": "CX"
     }
   ],
   "by_category": {
-    "High Interest & Hidden Fees": {
-      "count": 22
-    },
     "Fraud & Upfront Fee Scam": {
-      "count": 23
+      "count": 20
     },
-    "App Technical Glitches": {
-      "count": 13
+    "Loan Processing Issues": {
+      "count": 15
     },
     "Payment & Auto-Debit Issues": {
-      "count": 10
+      "count": 18
     },
     "Poor Customer Support": {
-      "count": 5
+      "count": 6
+    },
+    "High Interest & Hidden Fees": {
+      "count": 14
     }
   }
 }

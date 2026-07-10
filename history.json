@@ -507,6 +507,60 @@
           "count": 5
         }
       }
+    },
+    {
+      "date_range": "03 Jul 2026 \u2013 09 Jul 2026",
+      "generated_at": "2026-07-10",
+      "total": 73,
+      "weekly_total": 1265,
+      "avg_rating": 4.8,
+      "signal_rate": 5.8,
+      "star_counts": {
+        "1": 61,
+        "2": 9,
+        "3": 3,
+        "4": 21,
+        "5": 1171
+      },
+      "buckets": [
+        {
+          "name": "Fraud & Upfront Fee Scam",
+          "team_tag": "Compliance"
+        },
+        {
+          "name": "High Interest & Hidden Fees",
+          "team_tag": "Product"
+        },
+        {
+          "name": "Loan Processing Issues",
+          "team_tag": "Ops"
+        },
+        {
+          "name": "Payment & Auto-Debit Issues",
+          "team_tag": "Payments"
+        },
+        {
+          "name": "Poor Customer Support",
+          "team_tag": "CX"
+        }
+      ],
+      "by_category": {
+        "Fraud & Upfront Fee Scam": {
+          "count": 20
+        },
+        "Loan Processing Issues": {
+          "count": 15
+        },
+        "Payment & Auto-Debit Issues": {
+          "count": 18
+        },
+        "Poor Customer Support": {
+          "count": 6
+        },
+        "High Interest & Hidden Fees": {
+          "count": 14
+        }
+      }
     }
   ]
 }
