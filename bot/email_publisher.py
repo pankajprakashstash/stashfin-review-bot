@@ -120,7 +120,7 @@ def _trend_chart_url(digest: dict) -> str:
 
     config_str = json.dumps(chart_config, separators=(',', ':'))
     encoded    = urllib.parse.quote(config_str, safe='')
-    return f'https://quickchart.io/chart?w=540&h=200&bkg=white&c={encoded}'
+    return f'https://quickchart.io/chart?w=540&h=200&bkg=white&v=4&c={encoded}'
 
 
 # ── Sparkline with delta ABOVE latest bar ─────────────────────────
