@@ -53,20 +53,23 @@ def _trend_chart_url(digest: dict) -> str:
         return ''
 
     first_series = trend_data.get(top_issues[0][0], [])
-    week_labels  = []
-    for pt in first_series:
-        dr    = pt.get('date', '')
-        short = dr.split('–')[0].strip() if '–' in dr else dr[:8]
-        week_labels.append(short)
+    week_labels     = []
+week_labels_raw = []
+for pt in first_series:
+    dr    = pt.get('date', '')
+    short = dr.split('–')[0].strip() if '–' in dr else dr[:8]
+    week_labels.append(short)
+    week_labels_raw.append(dr)
 
-    if len(week_labels) < 2:
-        return ''
+if len(week_labels) < 2:
+    return ''
 
-    datasets = []
-    for cat, *_ in top_issues:
-        color  = color_map.get(cat, BRAND_CORAL)
-        series = trend_data.get(cat, [])
-        values = [pt.get('count', 0) for pt in series]
+datasets = []
+for cat, *_ in top_issues:
+    color       = color_map.get(cat, BRAND_CORAL)
+    series      = trend_data.get(cat, [])
+    cnt_by_date = {pt.get('date', ''): pt.get('count', 0) for pt in series}
+    values      = [cnt_by_date.get(wk, 0) for wk in week_labels_raw]
         if len(values) != len(week_labels):
             continue
         label  = cat[:18] + ('…' if len(cat) > 18 else '')
