@@ -1,14 +1,14 @@
 {
-  "date_range": "21 Jul 2026 \u2013 27 Jul 2026",
-  "generated_at": "2026-07-28",
-  "total": 60,
-  "weekly_total": 1756,
+  "date_range": "22 Jul 2026 \u2013 28 Jul 2026",
+  "generated_at": "2026-07-29",
+  "total": 63,
+  "weekly_total": 1797,
   "star_counts": {
-    "1": 51,
-    "2": 3,
-    "3": 6,
+    "1": 49,
+    "2": 6,
+    "3": 8,
     "4": 10,
-    "5": 1686
+    "5": 1724
   },
   "buckets": [],
   "by_category": {}
