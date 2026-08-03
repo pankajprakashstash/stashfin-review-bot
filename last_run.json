@@ -1,16 +1,16 @@
 {
   "date_range": "27 Jul 2026 \u2013 02 Aug 2026",
   "generated_at": "2026-08-03",
-  "total": 68,
-  "weekly_total": 1163,
+  "total": 72,
+  "weekly_total": 1166,
   "avg_rating": 4.8,
-  "signal_rate": 5.8,
+  "signal_rate": 6.2,
   "star_counts": {
-    "1": 53,
-    "2": 8,
+    "1": 56,
+    "2": 9,
     "3": 7,
     "4": 17,
-    "5": 1078
+    "5": 1077
   },
   "buckets": [
     {
@@ -35,20 +35,20 @@
     }
   ],
   "by_category": {
-    "Payment Issues": {
-      "count": 3
-    },
-    "Loan Processing Issues": {
-      "count": 30
+    "Customer Support": {
+      "count": 10
     },
     "Fraud / Fee Scam": {
       "count": 19
     },
-    "Customer Support": {
-      "count": 9
+    "Loan Processing Issues": {
+      "count": 23
+    },
+    "Payment Issues": {
+      "count": 3
     },
     "App Technical Issues": {
-      "count": 7
+      "count": 17
     }
   }
 }
