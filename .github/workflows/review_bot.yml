@@ -41,10 +41,11 @@ jobs:
           GMAIL_SENDER:       ${{ secrets.GMAIL_SENDER }}
           GMAIL_APP_PASSWORD: ${{ secrets.GMAIL_APP_PASSWORD }}
           EMAIL_ALL:          ${{ secrets.EMAIL_ALL }}
-          # Set RUN_MODE based on what triggered this
-          # Monday 3:30am UTC = weekly email run
-          # All other times = scrape only (no email, no Gemini)
-          RUN_MODE: ${{ github.event.inputs.mode || 'auto' }}
+          # Set RUN_MODE based on WHICH cron fired this run — not just the
+          # day of week, since the daily cron also fires on Mondays and
+          # would otherwise trigger a second full run + duplicate email.
+          # github.event.schedule holds the exact cron expression that fired.
+          RUN_MODE: ${{ github.event.inputs.mode || (github.event.schedule == '30 3 * * 1' && 'full' || 'scrape_only') }}
         run: python main.py
 
       - name: Save history and publish detail page
