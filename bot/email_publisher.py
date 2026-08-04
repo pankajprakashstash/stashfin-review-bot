@@ -123,7 +123,7 @@ def _sparkline_with_delta(counts: list[int], color: str, delta: int) -> str:
     max_c = max(counts) or 1
     MAX_H = 20
     n     = len(counts)
-
+history      = digest.get('classified_history', [])
     delta_cells = ''
     for i in range(n):
         if i == n - 1:
@@ -241,7 +241,7 @@ def _build_html(digest: dict) -> str:
             f'<tr><td style="font-size:11px;font-weight:600;color:{BRAND_BLUE};'
             f'text-transform:uppercase;letter-spacing:.5px;'
             f'border-bottom:2px solid {BRAND_CORAL_LT};padding-bottom:6px;">'
-            f'Issue trend — last {len(digest.get("history",[]))+1} weeks'
+            f'Issue trend — last {len(digest.get("classified_history",[]))+1} weeks'
             f'</td></tr>'
             f'<tr><td style="padding-top:12px;">'
             f'<img src="{chart_url}" width="540" alt="Issue trend chart" '
