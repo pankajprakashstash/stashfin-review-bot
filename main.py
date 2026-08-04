@@ -37,10 +37,11 @@ def run_full():
         log.warning('No reviews fetched — exiting.')
         return
 
-    log.info('Step 2/5: Loading history...')
-    from bot.digest import load_history
-    history      = load_history()
-    prev_buckets = history[-1].get('buckets', []) if history else []
+log.info('Step 2/5: Loading history...')
+    from bot.digest import load_history, classified_weeks
+    history       = load_history()
+    prev_weeks    = classified_weeks(history)
+    prev_buckets  = prev_weeks[-1].get('buckets', []) if prev_weeks else []
     log.info(f'{len(history)} weeks stored | prev buckets: {[b["name"] for b in prev_buckets] or "none"}')
 
     log.info('Step 3/5: Classifying with Gemini...')
