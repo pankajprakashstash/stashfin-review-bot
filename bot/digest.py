@@ -33,7 +33,22 @@ def load_history() -> list[dict]:
 
 
 def save_history(weeks: list[dict]) -> None:
-    trimmed = weeks[-MAX_HISTORY_WEEKS:]
+    """
+    Trim by CLASSIFIED week count, not raw entry count. Daily scrape_only
+    entries (buckets: []) get appended most days and would otherwise
+    dominate a simple weeks[-MAX_HISTORY_WEEKS:] slice, silently pushing
+    out older classified weeks after just ~1 real week of runs.
+    """
+    classified = [w for w in weeks if w.get('buckets')]
+    keep       = classified[-MAX_HISTORY_WEEKS:]
+
+    if keep:
+        cutoff  = keep[0].get('generated_at', '')
+        trimmed = [w for w in weeks if w.get('generated_at', '') >= cutoff]
+    else:
+        # No classified weeks yet — just cap raw daily entries reasonably.
+        trimmed = weeks[-(MAX_HISTORY_WEEKS * 7):]
+
     with open(HISTORY, 'w') as f:
         json.dump({'weeks': trimmed}, f, indent=2)
     if trimmed:
@@ -42,12 +57,22 @@ def save_history(weeks: list[dict]) -> None:
     log.info(f'History saved ({len(trimmed)} weeks)')
 
 
+def classified_weeks(history: list[dict]) -> list[dict]:
+    """
+    Return only entries that came from a FULL run (Gemini-classified,
+    has real buckets). Daily scrape_only entries have empty 'buckets'
+    and would otherwise dilute the trend/table with blank columns.
+    """
+    return [wk for wk in history if wk.get('buckets')]
+
+
 def build_digest(reviews: list[dict], buckets: list[dict]) -> dict:
-    history     = load_history()
-    prev_week   = history[-1] if history else {}
-    prev_counts = {k: v.get('count', 0) for k, v in prev_week.get('by_category', {}).items()}
-    prev_total  = prev_week.get('total', 0)
-    prev_date   = prev_week.get('date_range', None)
+    history       = load_history()
+    classified    = classified_weeks(history)
+    prev_week     = classified[-1] if classified else {}
+    prev_counts   = {k: v.get('count', 0) for k, v in prev_week.get('by_category', {}).items()}
+    prev_total    = prev_week.get('total', 0)
+    prev_date     = prev_week.get('date_range', None)
 
     # Get date range from fetcher (window_start → window_end, today excluded)
     if reviews:
@@ -114,7 +139,7 @@ def build_digest(reviews: list[dict], buckets: list[dict]) -> dict:
     trend_data = {}
     for cat, count, *_ in top_issues:
         weekly = []
-        for wk in history[-7:]:
+        for wk in classified[-7:]:
             wk_count = wk.get('by_category', {}).get(cat, {}).get('count', 0)
             weekly.append({'date': wk.get('date_range', ''), 'count': wk_count})
         weekly.append({'date': date_range, 'count': count})
@@ -150,7 +175,8 @@ def build_digest(reviews: list[dict], buckets: list[dict]) -> dict:
         'color_map':       color_map,
         'spikes':          spikes,
         'trend_data':      trend_data,
-        'history':         history,
+        'history':         history,          # raw, incl. daily entries — used for persistence
+        'classified_history': classified,    # full-run weeks only — used for trend/table display
         'current_entry':   current_entry,
         'buckets':         buckets,
         'raw':             reviews,
@@ -159,5 +185,15 @@ def build_digest(reviews: list[dict], buckets: list[dict]) -> dict:
 
 def save_digest_to_history(digest: dict) -> None:
     history = list(digest['history'])
-    history.append(digest['current_entry'])
+    current = digest['current_entry']
+
+    # Defensive de-dupe: if the last stored entry is already this same
+    # date_range (e.g. workflow triggered twice for the same week),
+    # overwrite it instead of adding a duplicate column/point.
+    if history and history[-1].get('date_range') == current.get('date_range'):
+        log.warning(f'Duplicate run detected for {current["date_range"]} — overwriting last entry')
+        history[-1] = current
+    else:
+        history.append(current)
+
     save_history(history)
