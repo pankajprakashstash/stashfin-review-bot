@@ -40,7 +40,7 @@ def _trend_chart_url(digest: dict) -> str:
     v=4 forces Chart.js 4 which supports cubicInterpolationMode.
     cnt_by_date alignment matches detail page logic exactly.
     """
-    history    = digest.get('history', [])
+    history    = digest.get('classified_history', [])
     top_issues = [(c,n,d,t,p) for c,n,d,t,p in digest['top_issues']
                   if c not in EXCLUDE][:5]
     trend_data = digest.get('trend_data', {})
