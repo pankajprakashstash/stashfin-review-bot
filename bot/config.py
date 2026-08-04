@@ -24,7 +24,7 @@ EMAIL_ALL = [
     if e.strip()
 ]
 # ── GitHub Pages ───────────────────────────────────────────────────
-PAGES_URL = 'https://vishalvijayvergiya.github.io/stashfin-review-bot/'
+PAGES_URL = 'https://pankajprakashstash.github.io/stashfin-review-bot/'
 # ── History ────────────────────────────────────────────────────────
 MAX_HISTORY_WEEKS = 8
 TABLE_WEEKS       = 4
