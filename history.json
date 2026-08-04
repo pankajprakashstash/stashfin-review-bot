@@ -1,96 +1,6 @@
 {
   "weeks": [
     {
-      "date_range": "21 Jul 2026 \u2013 27 Jul 2026",
-      "generated_at": "2026-07-28",
-      "total": 60,
-      "weekly_total": 1756,
-      "star_counts": {
-        "1": 51,
-        "2": 3,
-        "3": 6,
-        "4": 10,
-        "5": 1686
-      },
-      "buckets": [],
-      "by_category": {}
-    },
-    {
-      "date_range": "22 Jul 2026 \u2013 28 Jul 2026",
-      "generated_at": "2026-07-29",
-      "total": 63,
-      "weekly_total": 1797,
-      "star_counts": {
-        "1": 49,
-        "2": 6,
-        "3": 8,
-        "4": 10,
-        "5": 1724
-      },
-      "buckets": [],
-      "by_category": {}
-    },
-    {
-      "date_range": "23 Jul 2026 \u2013 29 Jul 2026",
-      "generated_at": "2026-07-30",
-      "total": 72,
-      "weekly_total": 1729,
-      "star_counts": {
-        "1": 55,
-        "2": 8,
-        "3": 9,
-        "4": 10,
-        "5": 1647
-      },
-      "buckets": [],
-      "by_category": {}
-    },
-    {
-      "date_range": "24 Jul 2026 \u2013 30 Jul 2026",
-      "generated_at": "2026-07-31",
-      "total": 79,
-      "weekly_total": 1699,
-      "star_counts": {
-        "1": 60,
-        "2": 10,
-        "3": 9,
-        "4": 10,
-        "5": 1610
-      },
-      "buckets": [],
-      "by_category": {}
-    },
-    {
-      "date_range": "25 Jul 2026 \u2013 31 Jul 2026",
-      "generated_at": "2026-08-01",
-      "total": 67,
-      "weekly_total": 1366,
-      "star_counts": {
-        "1": 50,
-        "2": 10,
-        "3": 7,
-        "4": 10,
-        "5": 1289
-      },
-      "buckets": [],
-      "by_category": {}
-    },
-    {
-      "date_range": "26 Jul 2026 \u2013 01 Aug 2026",
-      "generated_at": "2026-08-02",
-      "total": 68,
-      "weekly_total": 1396,
-      "star_counts": {
-        "1": 54,
-        "2": 8,
-        "3": 6,
-        "4": 14,
-        "5": 1314
-      },
-      "buckets": [],
-      "by_category": {}
-    },
-    {
       "date_range": "27 Jul 2026 \u2013 02 Aug 2026",
       "generated_at": "2026-08-03",
       "total": 68,
@@ -197,6 +107,21 @@
           "count": 17
         }
       }
+    },
+    {
+      "date_range": "28 Jul 2026 \u2013 03 Aug 2026",
+      "generated_at": "2026-08-04",
+      "total": 72,
+      "weekly_total": 1285,
+      "star_counts": {
+        "1": 56,
+        "2": 8,
+        "3": 8,
+        "4": 15,
+        "5": 1198
+      },
+      "buckets": [],
+      "by_category": {}
     }
   ]
 }
