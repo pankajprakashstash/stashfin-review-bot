@@ -37,7 +37,7 @@ def run_full():
         log.warning('No reviews fetched — exiting.')
         return
 
-log.info('Step 2/5: Loading history...')
+    log.info('Step 2/5: Loading history...')
     from bot.digest import load_history, classified_weeks
     history       = load_history()
     prev_weeks    = classified_weeks(history)
