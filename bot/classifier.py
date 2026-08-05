@@ -7,6 +7,8 @@ Reviews with no text are auto-tagged — zero API cost.
 from __future__ import annotations
 import json
 import logging
+import re
+import threading
 import time
 import google.generativeai as genai
 from bot.config import GEMINI_API_KEY, GEMINI_MODEL, BATCH_SIZE
@@ -15,6 +17,13 @@ log = logging.getLogger(__name__)
 genai.configure(api_key=GEMINI_API_KEY)
 
 DISCOVERY_SAMPLE = 30
+
+# ── Rate limiting ──────────────────────────────────────────────────
+# Free tier allows ~5 requests/minute for this model. Pace calls so we
+# stay under that proactively, instead of just reacting to 429s.
+MIN_CALL_INTERVAL = 13  # seconds between calls (~4.6 req/min, safe buffer)
+_rate_lock         = threading.Lock()
+_last_call_time    = [0.0]
 
 DISCOVERY_PROMPT = """You are analyzing Google Play Store reviews for StashFin, an Indian fintech
 app (personal loans, EMI, credit line, UPI payments, bill payments).
@@ -71,7 +80,32 @@ REVIEWS:
 {reviews_block}"""
 
 
+def _wait_for_rate_limit() -> None:
+    """Block until it's been at least MIN_CALL_INTERVAL since the last Gemini call."""
+    with _rate_lock:
+        elapsed = time.time() - _last_call_time[0]
+        if elapsed < MIN_CALL_INTERVAL:
+            wait = MIN_CALL_INTERVAL - elapsed
+            log.info(f'Pacing: waiting {wait:.1f}s to stay under the free-tier rate limit...')
+            time.sleep(wait)
+        _last_call_time[0] = time.time()
+
+
+def _extract_retry_delay(err_text: str) -> int | None:
+    """Pull the 'seconds: N' the API tells us to wait, out of the 429 error body."""
+    m = re.search(r'seconds:\s*(\d+)', err_text)
+    return int(m.group(1)) if m else None
+
+
+def _is_daily_quota_exhausted(err_text: str) -> bool:
+    """Distinguish a per-day quota (nothing we can do but wait for tomorrow)
+    from a per-minute rate limit (safe to back off and retry same run)."""
+    flat = err_text.lower().replace(' ', '')
+    return 'perday' in flat or 'requestsperday' in flat
+
+
 def _call_gemini(prompt: str, attempt: int = 0) -> str:
+    _wait_for_rate_limit()
     try:
         model = genai.GenerativeModel(GEMINI_MODEL)
         resp  = model.generate_content(
@@ -80,10 +114,24 @@ def _call_gemini(prompt: str, attempt: int = 0) -> str:
         )
         return resp.text.strip()
     except Exception as e:
-        err = str(e).lower()
-        if '429' in str(e) or 'quota' in err or 'exhausted' in err or 'resource_exhausted' in err:
-            log.error('Gemini quota exhausted — resets daily at midnight PT')
+        err       = str(e)
+        err_lower = err.lower()
+        is_rate_limit = ('429' in err or 'quota' in err_lower
+                          or 'exhausted' in err_lower or 'resource_exhausted' in err_lower)
+
+        if is_rate_limit:
+            if _is_daily_quota_exhausted(err):
+                log.error('Gemini DAILY quota exhausted — resets at midnight PT. Aborting run.')
+                raise
+            if attempt < 6:
+                wait = (_extract_retry_delay(err) or (10 * (attempt + 1))) + 2
+                log.warning(f'Gemini rate limit hit (attempt {attempt+1}/6) — '
+                            f'waiting {wait}s as instructed by the API...')
+                time.sleep(wait)
+                return _call_gemini(prompt, attempt + 1)
+            log.error('Gemini rate limit — exceeded max retries for this run.')
             raise
+
         if attempt < 2:
             wait = 3 * (attempt + 1)
             log.warning(f'Gemini error: {e} — retry in {wait}s')
