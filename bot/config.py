@@ -13,7 +13,7 @@ DAYS_TO_FETCH        = 7
 MAX_REVIEWS_PER_STAR = 850
 # ── Gemini ─────────────────────────────────────────────────────────
 GEMINI_API_KEY = os.environ.get('GEMINI_API_KEY', '')
-GEMINI_MODEL   = 'gemini-flash-latest'
+GEMINI_MODEL = 'gemini-2.5-flash'
 BATCH_SIZE     = 35
 # ── Gmail ──────────────────────────────────────────────────────────
 GMAIL_SENDER       = os.environ.get('GMAIL_SENDER', '')
