@@ -27,7 +27,7 @@ _client = genai.Client(api_key=GEMINI_API_KEY)
 # ONLY when the primary is persistently overloaded (503) or hits its per-model
 # daily cap. Each model has its own independent load and its own RPD bucket, so
 # falling back rides out both transient spikes and quota exhaustion.
-_FALLBACKS = ['gemini-2.5-flash', 'gemini-2.5-flash-lite', 'gemini-2.0-flash']
+_FALLBACKS = ['gemini-3.6-flash', 'gemini-3.5-flash', 'gemini-3.5-flash-lite', 'gemini-flash-latest']
 _MODELS = [GEMINI_MODEL] + [m for m in _FALLBACKS if m != GEMINI_MODEL]
 
 DISCOVERY_SAMPLE = 30
@@ -139,6 +139,15 @@ def _is_transient(err_text: str) -> bool:
             or 'internal error' in t or 'high demand' in t)
 
 
+def _is_model_unavailable(err_text: str) -> bool:
+    """404 — the model ID was retired / not available to this project. Retrying the
+    same model is pointless, but another model in the chain will work. This is what
+    makes the bot survive Google retiring a model out from under it."""
+    t = err_text.lower()
+    return '404' in err_text and ('not_found' in t or 'not found' in t
+                                   or 'not available' in t or 'no longer available' in t)
+
+
 def _call_one_model(model: str, prompt: str, attempt: int = 0) -> str:
     """Call a single model with retry on minute-rate-limit and transient errors.
     Raises if the model can't be made to answer within its retry budgets, or on
@@ -161,6 +170,11 @@ def _call_one_model(model: str, prompt: str, attempt: int = 0) -> str:
         return text.strip()
     except Exception as e:
         err = str(e)
+
+        # Model retired / not available (404): don't retry — let caller fall back.
+        if _is_model_unavailable(err):
+            log.warning(f'{model}: not available (404) — {err[:90]}')
+            raise
 
         # Per-day quota: no point retrying this model today — let caller fall back.
         if _is_rate_limit(err) and _is_daily_quota_exhausted(err):
@@ -206,7 +220,8 @@ def _call_gemini(prompt: str) -> str:
         except Exception as e:
             last_err = e
             err = str(e)
-            recoverable = _is_transient(err) or _is_daily_quota_exhausted(err) or _is_rate_limit(err)
+            recoverable = (_is_transient(err) or _is_daily_quota_exhausted(err)
+                           or _is_rate_limit(err) or _is_model_unavailable(err))
             if recoverable and i < len(_MODELS) - 1:
                 log.warning(f'Falling back from {model} to {_MODELS[i+1]}...')
                 continue
