@@ -3,6 +3,10 @@ classifier.py — Two-pass dynamic classification using Gemini.
 Pass 1: discover 5-7 broad umbrella issue buckets (not granular sub-issues).
 Pass 2: classify all reviews into those buckets in batches.
 Reviews with no text are auto-tagged — zero API cost.
+
+MIGRATED: uses the current `google-genai` SDK. The old `google-generativeai`
+package has been fully retired by Google (support ended Aug 31 2025) and is the
+reason the run was dying at Step 3.
 """
 from __future__ import annotations
 import json
@@ -10,11 +14,14 @@ import logging
 import re
 import threading
 import time
-import google.generativeai as genai
+from google import genai
+from google.genai import types
 from bot.config import GEMINI_API_KEY, GEMINI_MODEL, BATCH_SIZE
 
 log = logging.getLogger(__name__)
-genai.configure(api_key=GEMINI_API_KEY)
+
+# New SDK uses an explicit client instead of a module-level configure().
+_client = genai.Client(api_key=GEMINI_API_KEY)
 
 DISCOVERY_SAMPLE = 30
 
@@ -107,12 +114,26 @@ def _is_daily_quota_exhausted(err_text: str) -> bool:
 def _call_gemini(prompt: str, attempt: int = 0) -> str:
     _wait_for_rate_limit()
     try:
-        model = genai.GenerativeModel(GEMINI_MODEL)
-        resp  = model.generate_content(
-            prompt,
-            generation_config=genai.GenerationConfig(temperature=0.1)
+        resp = _client.models.generate_content(
+            model=GEMINI_MODEL,
+            contents=prompt,
+            config=types.GenerateContentConfig(temperature=0.1),
         )
-        return resp.text.strip()
+        # resp.text can be None if the response was blocked (safety), hit the
+        # token cap, or returned no candidate. The old code crashed here with a
+        # ValueError; treat it as an empty result so the caller's JSON-parse
+        # fallback kicks in instead of killing the whole run.
+        text = resp.text
+        if not text:
+            reason = ''
+            try:
+                if resp.candidates:
+                    reason = str(resp.candidates[0].finish_reason)
+            except Exception:
+                pass
+            log.warning(f'Gemini returned no text (finish_reason={reason or "unknown"}).')
+            return ''
+        return text.strip()
     except Exception as e:
         err       = str(e)
         err_lower = err.lower()
@@ -144,6 +165,8 @@ def _parse(raw: str, fallback: list) -> list:
     raw = raw.strip()
     if raw.startswith('```'):
         raw = '\n'.join(raw.split('\n')[1:]).rsplit('```', 1)[0].strip()
+    if not raw:
+        return fallback
     try:
         return json.loads(raw)
     except json.JSONDecodeError as e:
