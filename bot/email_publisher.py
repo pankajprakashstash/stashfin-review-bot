@@ -123,7 +123,6 @@ def _sparkline_with_delta(counts: list[int], color: str, delta: int) -> str:
     max_c = max(counts) or 1
     MAX_H = 20
     n     = len(counts)
-history      = digest.get('classified_history', [])
     delta_cells = ''
     for i in range(n):
         if i == n - 1:
