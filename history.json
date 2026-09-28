@@ -1026,6 +1026,60 @@
       },
       "buckets": [],
       "by_category": {}
+    },
+    {
+      "date_range": "21 Sep 2026 \u2013 27 Sep 2026",
+      "generated_at": "2026-09-28",
+      "total": 81,
+      "weekly_total": 954,
+      "avg_rating": 4.6,
+      "signal_rate": 8.5,
+      "star_counts": {
+        "1": 37,
+        "2": 2,
+        "3": 42,
+        "4": 107,
+        "5": 766
+      },
+      "buckets": [
+        {
+          "name": "Payment Issues",
+          "team_tag": "Payments"
+        },
+        {
+          "name": "Fraud / Fee Scam",
+          "team_tag": "Compliance"
+        },
+        {
+          "name": "Customer Support",
+          "team_tag": "CX"
+        },
+        {
+          "name": "Loan Processing Issues",
+          "team_tag": "Ops"
+        },
+        {
+          "name": "App Technical Issues",
+          "team_tag": "Tech"
+        }
+      ],
+      "by_category": {
+        "Payment Issues": {
+          "count": 16
+        },
+        "Customer Support": {
+          "count": 12
+        },
+        "Fraud / Fee Scam": {
+          "count": 5
+        },
+        "App Technical Issues": {
+          "count": 7
+        },
+        "Loan Processing Issues": {
+          "count": 41
+        }
+      }
     }
   ]
 }
