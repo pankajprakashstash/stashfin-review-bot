@@ -377,7 +377,7 @@ def _build_html(digest: dict) -> str:
     <div style="font-size:10px;color:#999;line-height:1.7;">
       <strong style="color:{BRAND_BLUE};">Note:</strong>
       Reviews reflect user perception — signals for discussion, not confirmed failures.<br>
-      Auto-generated · {date_range} · 1-2-3★ only · Contact Vishal (Marketing)
+      Auto-generated · {date_range} · 1-2-3★ only · Contact Pankaj Prakash (Marketing)
     </div>
   </td></tr>
 
