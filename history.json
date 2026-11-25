@@ -1929,6 +1929,21 @@
       },
       "buckets": [],
       "by_category": {}
+    },
+    {
+      "date_range": "18 Nov 2026 \u2013 24 Nov 2026",
+      "generated_at": "2026-11-25",
+      "total": 60,
+      "weekly_total": 985,
+      "star_counts": {
+        "1": 39,
+        "2": 2,
+        "3": 19,
+        "4": 75,
+        "5": 850
+      },
+      "buckets": [],
+      "by_category": {}
     }
   ]
 }
